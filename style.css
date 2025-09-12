@@ -365,6 +365,12 @@ header {
   background: #2c3e50;
   transform: scale(1.05);
 }
+.project-card img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
 /* 🎓 Certificates Section */
 #certificates {
   padding: 80px 10%;
