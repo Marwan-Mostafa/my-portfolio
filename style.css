@@ -23,6 +23,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
+  height: 8%;
   padding: 3px 9%;
   display: flex;
   justify-content: space-between;
@@ -32,14 +33,9 @@ header {
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-#alx{
-  text-decoration: none;
-}
 #alx {
   position: relative;
   text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
 }
 
 #alx::after {
@@ -48,8 +44,8 @@ header {
   left: 0;
   bottom: 0;      
   width: 100%;                 
-  height: 2px;        
-  background-color: #007bff;
+  height: 2px;    
+  background-color: #181ebe;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -59,59 +55,6 @@ header {
   transform: scaleX(1);
 }
 
-/* Burger Menu */
-.burger-icon {
-  width: 28px;
-  height: 24px;
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.burger-icon span {
-  display: block;
-  height: 3px;
-  background: var(--primary-color);
-  border-radius: 4px;
-  transition: 0.3s;
-}
-
-/* Mobile Menu */
-.mobile-menu {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 70%;
-  height: 100vh;
-  background: #fff;
-  box-shadow: -4px 0 12px rgba(0,0,0,0.1);
-  padding: 80px 20px;
-  transition: 0.4s ease;
-  z-index: 999;
-}
-
-.mobile-menu ul {
-  list-style: none;
-  padding: 0;
-}
-
-.mobile-menu li {
-  margin: 20px 0;
-}
-
-.mobile-menu a {
-  font-size: 20px;
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.mobile-menu a:hover {
-  opacity: 0.7;
-}
-
 /* Mobile Responsive */
 @media (max-width: 900px) {
   nav ul { display: none; }
@@ -119,7 +62,7 @@ header {
 }
 
 .logo {
-  font-size:30px;
+  font-size:25px;
   font-family: "Roboto Condensed";
   font-weight: 700;
   color: var(--neutral-light);
@@ -144,8 +87,8 @@ header {
 .nav-link a {
   text-decoration: none;
   color: white;
-  font-weight: 500;
-  font-size: 26px;
+  font-weight: 450;
+  font-size: 25px;
   padding: 5px 0;
   transition: all 0.3s ease;
 }
@@ -281,7 +224,7 @@ header {
 /* Skills Section */
 #skills {
   padding: 80px 10%;
-  background: var(--neutral-light);
+  background: var(--neutral-dark);
   text-align: center;
 }
 
@@ -290,7 +233,7 @@ header {
   margin-bottom: 50px;
   position: relative;
   display: inline-block;
-  color: var(--neutral-dark);
+  color: white;
 }
 
 #skills h2::after {
@@ -347,7 +290,7 @@ header {
 .skill-card:hover p {
   color: var(--neutral-light);
 }
-/* 🎨 Projects Section */
+/*Projects Section */
 #projects {
   padding: 80px 10%;
   background: #ffffff;
@@ -458,12 +401,6 @@ header {
   object-fit: cover;
   transition: transform 0.3s ease;
 }
-/* 🎓 Certificates Section */
-#certificates {
-  padding: 80px 10%;
-  background: #f4f7fa;
-  text-align: center;
-}
 
 #certificates h2 {
   font-size: 36px;
@@ -541,7 +478,7 @@ header {
 /* Certificates Section */
 #certificates {
   padding: 80px 10%;
-  background: #f4f7fa;
+  background: #24ab71;
   text-align: center;
 }
 
@@ -550,15 +487,15 @@ header {
   margin-bottom: 50px;
   position: relative;
   display: inline-block;
-  color: #2c3e50;
+  color: #e7eaed;
 }
 
 #certificates h2::after {
   content: "";
   display: block;
-  width: 70%;
+  width: 100%;
   height: 4px;
-  background: #3498db;
+  background: #399352;
   margin: 8px auto 0;
   border-radius: 2px;
 }
