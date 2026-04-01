@@ -32,6 +32,33 @@ header {
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+#alx{
+  text-decoration: none;
+}
+#alx {
+  position: relative;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+#alx::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;      
+  width: 100%;                 
+  height: 2px;        
+  background-color: #007bff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+#alx:hover::after {
+  transform: scaleX(1);
+}
+
 /* Burger Menu */
 .burger-icon {
   width: 28px;
@@ -609,12 +636,12 @@ header {
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* Hover Effect Card */
 .certificate-card:hover {
   transform: translateY(-12px) scale(1.03);
   box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
-/* 🎨 Contact Section */
+
+
 #contact {
   padding: 80px 10%;
   background: linear-gradient(135deg, #3498db, #2ecc71);
@@ -741,7 +768,7 @@ header {
 .contact-info a:hover {
   color: #2c3e50;
 }
-/* 🎨 Footer */
+
 footer {
   background: #2c3e50;
   color: #f1f1f1;
