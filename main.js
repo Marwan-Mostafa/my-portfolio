@@ -27,3 +27,4 @@ form.addEventListener('submit', function(e) {
 
   }, 1500);
 });
+
