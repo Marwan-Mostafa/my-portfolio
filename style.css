@@ -33,6 +33,7 @@ header {
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+
 #alx {
   position: relative;
   text-decoration: none;
@@ -56,6 +57,7 @@ header {
 }
 
 /* Mobile Responsive */
+
 @media (max-width: 900px) {
   nav ul { display: none; }
   .burger-icon { display: flex; }
@@ -81,6 +83,11 @@ header {
   margin: 0;
   padding-right: 220px;
 }
+@media (max-width: 900px) {
+  .nav-link {
+    display: none;
+  }
+}
 .nav-link li {
   position: relative;
 }
@@ -102,11 +109,7 @@ header {
   background: #1abc9c;
   transition: width 0.3s;
 }
-@media (max-width: 900px) {
-  .nav-link {
-    display: none;
-  }
-}
+
 .nav-link a:hover {
   color: #1abc9c;
 }
@@ -114,16 +117,18 @@ header {
 .nav-link a:hover::after {
   width: 100%;
 }
+
 #hero {
   display: flex;
+  color: var(--neutral-dark);
   justify-content: flex-start;
   align-items: center;
   padding: 60px 10%;
   min-height: 90vh;
   background: linear-gradient(135deg, #3498db, #2ecc71);
-  color: var(--neutral-dark);
   gap: 150px; 
 }
+
 .hero-content {
   max-width: 600px;
 }
@@ -137,6 +142,7 @@ header {
   line-height: 1.6;
   margin-bottom: 30px;
 }
+
 .btn {
   display: inline-block;
   background: #2c3e50;
@@ -158,11 +164,13 @@ header {
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   animation: float 3s ease-in-out infinite;
 }
+
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }
   100% { transform: translateY(0px); }
 }
+
 @media (max-width: 900px) {
   #hero {
     flex-direction: column;
@@ -172,6 +180,7 @@ header {
     margin-top: 30px;
   }
 }
+
 #about {
   padding: 80px 15%;
   background: var(--neutral-light);
@@ -221,6 +230,7 @@ header {
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
+
 /* Skills Section */
 #skills {
   padding: 80px 10%;
@@ -290,6 +300,7 @@ header {
 .skill-card:hover p {
   color: var(--neutral-light);
 }
+
 /*Projects Section */
 #projects {
   padding: 80px 10%;
@@ -407,15 +418,15 @@ header {
   margin-bottom: 50px;
   position: relative;
   display: inline-block;
-  color: #2c3e50;
+  color: #e2e5e9;
 }
 
 #certificates h2::after {
   content: "";
   display: block;
-  width: 70%;
+  width: 100%;
   height: 4px;
-  background: #3498db;
+  background: #255193;
   margin: 8px auto 0;
   border-radius: 2px;
 }
@@ -427,39 +438,11 @@ header {
   gap: 25px;
 }
 
-/* Certificate Cards */
-.certificate-card {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  transition: all 0.4s ease;
-  cursor: pointer;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
-
 /* Title */
 .certificate-card h3 {
   font-size: 20px;
   margin-bottom: 10px;
   color: #3498db;
-}
-
-/* Description */
-.certificate-card p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 15px;
-  line-height: 1.6;
-}
-
-/* Organization */
-.certificate-card .org {
-  font-size: 13px;
-  font-style: italic;
-  color: #888;
 }
 
 /* Hover Effects */
@@ -475,36 +458,12 @@ header {
 .certificate-card:hover .org {
   color: white;
 }
+
 /* Certificates Section */
 #certificates {
   padding: 80px 10%;
   background: #24ab71;
   text-align: center;
-}
-
-#certificates h2 {
-  font-size: 36px;
-  margin-bottom: 50px;
-  position: relative;
-  display: inline-block;
-  color: #e7eaed;
-}
-
-#certificates h2::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 4px;
-  background: #399352;
-  margin: 8px auto 0;
-  border-radius: 2px;
-}
-
-/* Container */
-.certificates-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
 }
 
 /* Certificate Cards */
@@ -530,13 +489,6 @@ header {
 
 .certificate-card:hover img {
   transform: scale(1.05);
-}
-
-/* Text */
-.certificate-card h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #3498db;
 }
 
 .certificate-card p {
@@ -571,11 +523,6 @@ header {
   background: #2ecc71;
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-.certificate-card:hover {
-  transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
 
 
