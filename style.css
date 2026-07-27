@@ -1,41 +1,26 @@
-/* ==========================================================================
-   Marwan Mostafa — Portfolio
-   Design system: tokens → base/reset → layout → components → utilities
-   ========================================================================== */
-
-/* ---- Fonts ---- */
-/* Space Grotesk: display/headings · Inter: body copy · IBM Plex Mono: eyebrows/labels */
-
-/* ---- Design tokens ---- */
 :root {
-  /* Color: surfaces */
   --color-bg: #fafbfc;
   --color-surface: #ffffff;
   --color-surface-alt: #f1f4f8;
   --color-border: #e3e7ed;
 
-  /* Color: text */
   --color-ink: #12151c;
   --color-ink-muted: #5b6472;
   --color-inverse: #ffffff;
   --color-inverse-muted: #c4cbd6;
 
-  /* Color: brand */
   --color-primary: #2954e5;
   --color-primary-dark: #1b3bb0;
   --color-accent: #0ea5a0;
   --color-danger: #d64545;
   --color-header-bg: #12151c;
 
-  /* Gradients (used sparingly, for the hero + section dividers only) */
   --gradient-brand: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 
-  /* Type */
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-body: "Inter", "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
 
-  /* Spacing scale (4px base) */
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
   --space-3: 1rem;      /* 16px */
@@ -45,33 +30,27 @@
   --space-7: 4rem;      /* 64px */
   --space-8: 6rem;      /* 96px */
 
-  /* Radius */
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-full: 999px;
 
-  /* Shadow */
   --shadow-sm: 0 2px 8px rgba(18, 21, 28, 0.06);
   --shadow-md: 0 12px 30px rgba(18, 21, 28, 0.10);
   --shadow-lg: 0 20px 45px rgba(18, 21, 28, 0.16);
 
-  /* Motion */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --transition-fast: 0.18s var(--ease-standard);
   --transition-base: 0.3s var(--ease-standard);
   --transition-reveal: 0.6s var(--ease-out);
 
-  /* Brand-tinted hover shadows (used instead of flat black) */
   --shadow-brand-sm: 0 10px 24px rgba(41, 84, 229, 0.16);
   --shadow-brand-md: 0 20px 40px rgba(41, 84, 229, 0.22);
 
-  /* Layout */
   --container-width: 1180px;
   --header-height: 76px;
 }
 
-/* ---- Reset / base ---- */
 *,
 *::before,
 *::after {
@@ -115,7 +94,6 @@ ul {
   margin: 0;
 }
 
-/* Respect reduced-motion preferences globally */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -132,7 +110,6 @@ ul {
   }
 }
 
-/* ---- Scroll reveal ---- */
 [data-animate] {
   opacity: 0;
   transform: translateY(24px);
@@ -145,7 +122,6 @@ ul {
   transform: translateY(0);
 }
 
-/* Visible keyboard focus everywhere */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -154,7 +130,6 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
-/* Skip link */
 .skip-link {
   position: absolute;
   left: var(--space-3);
@@ -173,7 +148,6 @@ textarea:focus-visible {
   top: var(--space-3);
 }
 
-/* ---- Section shell ---- */
 section {
   padding: var(--space-8) 8%;
 }
@@ -195,7 +169,6 @@ section > h2::after {
   border-radius: var(--radius-full);
 }
 
-/* Phone-specific tightening (in addition to the 900px tablet breakpoint) */
 @media (max-width: 600px) {
   section {
     padding: var(--space-6) 6%;
@@ -216,10 +189,6 @@ section > h2::after {
   }
 }
 
-/* ==========================================================================
-   Header / Navigation
-   ========================================================================== */
-
 .site-header {
   position: fixed;
   inset: 0 0 auto 0;
@@ -239,7 +208,6 @@ section > h2::after {
   align-items: center;
 }
 
-/* Backdrop shown behind the open mobile menu; also used to lock scroll */
 .nav-scrim {
   position: fixed;
   inset: var(--header-height) 0 0 0;
@@ -323,7 +291,6 @@ body.nav-open {
   background: var(--color-accent);
 }
 
-/* Mobile menu toggle (hidden on desktop) */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -390,9 +357,6 @@ body.nav-open {
   }
 }
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
 
 .hero {
   display: flex;
@@ -516,9 +480,6 @@ body.nav-open {
   }
 }
 
-/* ==========================================================================
-   Buttons (single source of truth)
-   ========================================================================== */
 
 .btn {
   display: inline-block;
@@ -566,9 +527,6 @@ body.nav-open {
   transform: translateY(0) scale(0.98);
 }
 
-/* ==========================================================================
-   About
-   ========================================================================== */
 
 .about {
   background: var(--color-surface);
@@ -583,9 +541,6 @@ body.nav-open {
   color: var(--color-ink-muted);
 }
 
-/* ==========================================================================
-   Skills
-   ========================================================================== */
 
 .skills {
   background: var(--color-header-bg);
@@ -637,9 +592,6 @@ body.nav-open {
   color: var(--color-inverse);
 }
 
-/* ==========================================================================
-   Projects
-   ========================================================================== */
 
 .projects {
   background: var(--color-surface);
@@ -726,9 +678,6 @@ body.nav-open {
   transform: scale(1.05);
 }
 
-/* ==========================================================================
-   Certificates
-   ========================================================================== */
 
 .certificates {
   background: var(--color-surface-alt);
@@ -804,9 +753,6 @@ body.nav-open {
   transform: scale(1.05);
 }
 
-/* ==========================================================================
-   Contact
-   ========================================================================== */
 
 .contact {
   background: var(--gradient-brand);
@@ -957,10 +903,6 @@ body.nav-open {
 .contact-info a:focus-visible {
   color: var(--color-ink);
 }
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
 
 .site-footer {
   background: var(--color-header-bg);
