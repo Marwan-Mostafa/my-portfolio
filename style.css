@@ -22,14 +22,15 @@
 
   /* Color: brand */
   --color-primary: #2954e5;
-  --color-primary-dark: #1b3bb0;
+  --color-primary-hover: #1b3bb0;
   --color-accent: #0ea5a0;
+  --color-highlight: #f0a63a;
   --color-danger: #d64545;
   --color-success: #1a9c6b;
   --color-header-bg: #12151c;
 
-  /* Gradients (used sparingly, for the hero + section dividers only) */
-  --gradient-brand: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  /* Gradients (used sparingly, for hero/contact "brand moments" and card top-accents — not as a hover fill) */
+  --gradient-brand: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 40%, var(--color-accent)) 55%, var(--color-accent));
 
   /* Type */
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
@@ -87,8 +88,9 @@
   --color-ink-muted: #9aa3b2;
 
   --color-primary: #7c93ff;
-  --color-primary-dark: #97a9ff;
+  --color-primary-hover: #97a9ff;
   --color-accent: #2dd4c7;
+  --color-highlight: #ffb84d;
   --color-danger: #ff6b6b;
   --color-success: #34d399;
 
@@ -109,8 +111,9 @@
     --color-ink-muted: #9aa3b2;
 
     --color-primary: #7c93ff;
-    --color-primary-dark: #97a9ff;
+    --color-primary-hover: #97a9ff;
     --color-accent: #2dd4c7;
+    --color-highlight: #ffb84d;
     --color-danger: #ff6b6b;
     --color-success: #34d399;
 
@@ -202,6 +205,18 @@ input:focus-visible,
 textarea:focus-visible {
   outline: 3px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Pill/circular controls get a shape-matching double ring instead of a square outline */
+.btn:focus-visible,
+.btn-demo:focus-visible,
+.btn-github:focus-visible,
+.cert-btn:focus-visible,
+.btn-submit:focus-visible,
+.theme-toggle:focus-visible,
+.menu-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 6px var(--color-accent);
 }
 
 /* Skip link */
@@ -599,7 +614,21 @@ body.nav-open {
   transform: scaleX(1);
 }
 
+.hero-image {
+  position: relative;
+}
+
+.hero-image::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 70%);
+  z-index: 0;
+}
+
 .hero-image img {
+  position: relative;
+  z-index: 1;
   width: 280px;
   height: 280px;
   object-fit: cover;
@@ -654,7 +683,7 @@ body.nav-open {
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
-  background: var(--color-primary-dark);
+  background: var(--color-primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-brand-md);
 }
@@ -720,18 +749,34 @@ body.nav-open {
 }
 
 .skill-card {
+  position: relative;
+  overflow: hidden;
   background: var(--color-surface);
   padding: var(--space-5) var(--space-4);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), color var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
   text-align: left;
+}
+
+.skill-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
 }
 
 .skill-card h3 {
   font-size: 1.25rem;
   margin-bottom: var(--space-2);
   color: var(--color-primary);
+  transition: color var(--transition-base);
 }
 
 .skill-card p {
@@ -743,13 +788,15 @@ body.nav-open {
 .skill-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-brand-md);
-  background: var(--gradient-brand);
-  color: var(--color-inverse);
+  background-color: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
 }
 
-.skill-card:hover h3,
-.skill-card:hover p {
-  color: var(--color-inverse);
+.skill-card:hover::before {
+  transform: scaleX(1);
+}
+
+.skill-card:hover h3 {
+  color: var(--color-accent);
 }
 
 /* ==========================================================================
@@ -770,18 +817,48 @@ body.nav-open {
 }
 
 .project-card {
+  position: relative;
+  overflow: hidden;
   background: var(--color-surface-alt);
   border-radius: var(--radius-md);
   padding: var(--space-5);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), color var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
   text-align: left;
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
 }
 
 .project-card h3 {
   font-size: 1.25rem;
   margin-bottom: var(--space-3);
   color: var(--color-primary);
+  transition: color var(--transition-base);
+}
+
+.project-badge {
+  display: inline-block;
+  background: color-mix(in srgb, var(--color-highlight) 18%, transparent);
+  color: var(--color-highlight);
+  border: 1px solid color-mix(in srgb, var(--color-highlight) 45%, transparent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
 }
 
 .project-card p {
@@ -795,13 +872,15 @@ body.nav-open {
 .project-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-brand-md);
-  background: var(--gradient-brand);
-  color: var(--color-inverse);
+  background-color: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-alt));
 }
 
-.project-card:hover h3,
-.project-card:hover p {
-  color: var(--color-inverse);
+.project-card:hover::before {
+  transform: scaleX(1);
+}
+
+.project-card:hover h3 {
+  color: var(--color-accent);
 }
 
 .project-links {
@@ -827,7 +906,12 @@ body.nav-open {
 .btn-demo:hover,
 .btn-demo:focus-visible {
   background: color-mix(in srgb, var(--color-accent) 82%, black);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-brand-sm);
+}
+
+.btn-demo:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-github {
@@ -838,7 +922,12 @@ body.nav-open {
 .btn-github:hover,
 .btn-github:focus-visible {
   background: #000000;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-github:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* ==========================================================================
@@ -915,8 +1004,13 @@ body.nav-open {
 
 .cert-btn:hover,
 .cert-btn:focus-visible {
-  background: var(--color-primary-dark);
-  transform: scale(1.05);
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-brand-sm);
+}
+
+.cert-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* ==========================================================================
@@ -950,7 +1044,7 @@ body.nav-open {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   color: var(--color-ink);
-  animation: fade-in-up 0.6s ease;
+  animation: fade-in-up 0.6s var(--ease-out);
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
