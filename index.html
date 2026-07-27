@@ -4,6 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem("theme");
+                var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                document.documentElement.setAttribute("data-theme", theme);
+            } catch (e) {
+                /* localStorage unavailable (private mode, etc.) — default styling still applies */
+            }
+        })();
+    </script>
     <title>Marwan Mostafa | Frontend Developer</title>
     <meta name="description"
         content="Marwan Mostafa is a frontend developer building fast, accessible, and polished web interfaces with JavaScript, HTML5, and CSS.">
@@ -34,23 +46,41 @@
             <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">MM<span
                     class="brand-dot">.</span></a>
 
-            <nav class="nav" aria-label="Primary">
-                <ul class="nav-menu" id="nav-menu">
-                    <li><a href="#hero" data-nav-link>Home</a></li>
-                    <li><a href="#about" data-nav-link>About</a></li>
-                    <li><a href="#skills" data-nav-link>Skills</a></li>
-                    <li><a href="#projects" data-nav-link>Projects</a></li>
-                    <li><a href="#certificates" data-nav-link>Certificates</a></li>
-                    <li><a href="#contact" data-nav-link>Contact</a></li>
-                </ul>
-            </nav>
+            <div class="header-controls">
+                <nav class="nav" aria-label="Primary">
+                    <ul class="nav-menu" id="nav-menu">
+                        <li><a href="#hero" data-nav-link>Home</a></li>
+                        <li><a href="#about" data-nav-link>About</a></li>
+                        <li><a href="#skills" data-nav-link>Skills</a></li>
+                        <li><a href="#projects" data-nav-link>Projects</a></li>
+                        <li><a href="#certificates" data-nav-link>Certificates</a></li>
+                        <li><a href="#contact" data-nav-link>Contact</a></li>
+                    </ul>
+                </nav>
 
-            <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="nav-menu" aria-expanded="false"
-                aria-label="Open menu">
-                <span class="menu-toggle-bar"></span>
-                <span class="menu-toggle-bar"></span>
-                <span class="menu-toggle-bar"></span>
-            </button>
+                <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"
+                    aria-label="Switch to dark theme">
+                    <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path
+                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41">
+                        </path>
+                    </svg>
+                    <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+                    </svg>
+                </button>
+
+                <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="nav-menu"
+                    aria-expanded="false" aria-label="Open menu">
+                    <span class="menu-toggle-bar"></span>
+                    <span class="menu-toggle-bar"></span>
+                    <span class="menu-toggle-bar"></span>
+                </button>
+            </div>
         </div>
     </header>
     <div class="nav-scrim" id="nav-scrim" hidden></div>
@@ -72,7 +102,6 @@
                         Proficient in reusable component architecture, DOM manipulation, state
                         management, performance optimization semantic HTML with a
                         strong focus on clean maintainable and efficient code.
-
                     </p>
                     <a href="#projects" class="btn btn-primary">View my work</a>
                 </div>
@@ -90,7 +119,6 @@
                     I specialize in building responsive web applications that combine clean implementation with
                     intuitive user experiences. My approach emphasizes semantic code, reusable components, performance
                     optimization, and accessibility to create interfaces that are both reliable and easy to maintain.
-
                 </p>
                 <a href="https://github.com/Marwan-Mostafa" target="_blank" rel="noopener noreferrer"
                     class="btn btn-outline">See my projects</a>
@@ -132,22 +160,6 @@
         <section id="projects" class="projects" aria-labelledby="projects-heading">
             <h2 id="projects-heading">Projects</h2>
             <div class="projects-grid">
-
-                <article class="project-card" data-animate>
-                    <h3>Furniro Website</h3>
-                    <p>
-                        Furniro is a responsive furniture e-commerce website built with HTML5, Tailwind CSS, and Vanilla
-                        JavaScript, featuring reusable components, modular architecture, and efficient state management.
-                    </p>
-                    <div class="project-links">
-                        <a href="https://marwan-mostafa.github.io/pages/home/home.html" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
-                        <a href="https://github.com/Marwan-Mostafa/marwan-mostafa.github.io/" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
-                        <a href="https://www.figma.com/design/teKWBHEEZ5dyHaCTEnXBuG/eCommerce-Website-%7C-Web-Page-Design-%7C-UI-KIT-%7C-Interior-Landing-Page--Community-?node-id=0-1&t=kwlKS2M3TABi8yIM-0"
-                            target="_blank" rel="noopener noreferrer" class="btn-demo">Figma Design</a>
-                    </div>
-                </article>
 
                 <article class="project-card" data-animate>
                     <h3>Brainwave Website</h3>
@@ -227,7 +239,7 @@
             <div class="certificates-grid">
 
                 <article class="certificate-card" data-animate>
-                    <img src="img/HTML & CSS.jpg" alt="HTML and CSS in Depth certificate" loading="lazy"
+                    <img src="img/HTML%20&%20CSS.jpg" alt="HTML and CSS in Depth certificate" loading="lazy"
                         decoding="async">
                     <h3>HTML &amp; CSS in Depth</h3>
                     <p>Advanced knowledge of semantic HTML and modern CSS techniques.</p>
@@ -238,8 +250,8 @@
                 </article>
 
                 <article class="certificate-card" data-animate>
-                    <img src="img/Coursera JS certificate.jpg" alt="Programming JavaScript certificate" loading="lazy"
-                        decoding="async">
+                    <img src="img/Coursera%20JS%20certificate.jpg" alt="Programming JavaScript certificate"
+                        loading="lazy" decoding="async">
                     <h3>Programming JavaScript</h3>
                     <p>Advanced knowledge of JavaScript.</p>
                     <span class="org">by Coursera</span>
@@ -249,7 +261,7 @@
                 </article>
 
                 <article class="certificate-card" data-animate>
-                    <img src="img/python programming certificate.jpg" alt="Programming Python certificate"
+                    <img src="img/python%20programming%20certificate.jpg" alt="Programming Python certificate"
                         loading="lazy" decoding="async">
                     <h3>Programming Python</h3>
                     <p>Advanced knowledge of Python.</p>

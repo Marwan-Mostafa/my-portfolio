@@ -1,6 +1,43 @@
 (function () {
   "use strict";
 
+  /* ==========================================================================
+     Theme toggle (light / dark)
+     ========================================================================== */
+
+  function initThemeToggle() {
+    const toggle = document.getElementById("theme-toggle");
+    const root = document.documentElement;
+
+    if (!toggle) return;
+
+    function currentTheme() {
+      return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      toggle.setAttribute("aria-pressed", String(theme === "dark"));
+      toggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+      try {
+        localStorage.setItem("theme", theme);
+      } catch (e) {
+        /* localStorage unavailable — theme still applies for this session */
+      }
+    }
+
+    // Sync button state with whatever the anti-flash inline script already set.
+    applyTheme(currentTheme());
+
+    toggle.addEventListener("click", function () {
+      applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    });
+  }
+
+  /* ==========================================================================
+     Mobile navigation toggle
+     ========================================================================== */
+
   function initMobileNav() {
     const toggle = document.getElementById("menu-toggle");
     const menu = document.getElementById("nav-menu");
@@ -49,6 +86,9 @@
     });
   }
 
+  /* ==========================================================================
+     Scrollspy — highlights the nav link for the section currently in view
+     ========================================================================== */
 
   function initScrollSpy() {
     const navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-nav-link]"));
@@ -87,6 +127,9 @@
     });
   }
 
+  /* ==========================================================================
+     Scroll reveal — fades/rises elements into view, staggered per group
+     ========================================================================== */
 
   function initScrollReveal() {
     const targets = Array.prototype.slice.call(document.querySelectorAll("[data-animate]"));
@@ -104,6 +147,7 @@
     const STAGGER_STEP_MS = 70;
     const MAX_STAGGER_MS = 280;
 
+    // Stagger items that share the same parent grid (skills, projects, certificates).
     const groups = new Map();
     targets.forEach(function (el) {
       const parent = el.parentElement;
@@ -134,6 +178,13 @@
     });
   }
 
+  /* ==========================================================================
+     Contact form
+     ========================================================================== */
+
+  // TODO: point this at a real form backend (Formspree, Getform, a custom
+  // API route, etc.) before deploying. Until then, submissions cannot
+  // actually be delivered anywhere.
   const FORM_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID";
 
   const SUCCESS_MESSAGE_DURATION_MS = 3000;
@@ -224,7 +275,12 @@
     });
   }
 
+  /* ==========================================================================
+     Init
+     ========================================================================== */
+
   document.addEventListener("DOMContentLoaded", function () {
+    initThemeToggle();
     initMobileNav();
     initContactForm();
     initScrollSpy();

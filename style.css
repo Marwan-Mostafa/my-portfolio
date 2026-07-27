@@ -1,26 +1,42 @@
+/* ==========================================================================
+   Marwan Mostafa — Portfolio
+   Design system: tokens → base/reset → layout → components → utilities
+   ========================================================================== */
+
+/* ---- Fonts ---- */
+/* Space Grotesk: display/headings · Inter: body copy · IBM Plex Mono: eyebrows/labels */
+
+/* ---- Design tokens ---- */
 :root {
+  /* Color: surfaces */
   --color-bg: #fafbfc;
   --color-surface: #ffffff;
   --color-surface-alt: #f1f4f8;
   --color-border: #e3e7ed;
 
+  /* Color: text */
   --color-ink: #12151c;
   --color-ink-muted: #5b6472;
   --color-inverse: #ffffff;
   --color-inverse-muted: #c4cbd6;
 
+  /* Color: brand */
   --color-primary: #2954e5;
   --color-primary-dark: #1b3bb0;
   --color-accent: #0ea5a0;
   --color-danger: #d64545;
+  --color-success: #1a9c6b;
   --color-header-bg: #12151c;
 
+  /* Gradients (used sparingly, for the hero + section dividers only) */
   --gradient-brand: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 
+  /* Type */
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-body: "Inter", "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
 
+  /* Spacing scale (4px base) */
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
   --space-3: 1rem;      /* 16px */
@@ -30,27 +46,81 @@
   --space-7: 4rem;      /* 64px */
   --space-8: 6rem;      /* 96px */
 
+  /* Radius */
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-full: 999px;
 
+  /* Shadow */
   --shadow-sm: 0 2px 8px rgba(18, 21, 28, 0.06);
   --shadow-md: 0 12px 30px rgba(18, 21, 28, 0.10);
   --shadow-lg: 0 20px 45px rgba(18, 21, 28, 0.16);
 
+  /* Motion */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --transition-fast: 0.18s var(--ease-standard);
   --transition-base: 0.3s var(--ease-standard);
   --transition-reveal: 0.6s var(--ease-out);
 
+  /* Brand-tinted hover shadows (used instead of flat black) */
   --shadow-brand-sm: 0 10px 24px rgba(41, 84, 229, 0.16);
   --shadow-brand-md: 0 20px 40px rgba(41, 84, 229, 0.22);
 
+  /* Layout */
   --container-width: 1180px;
   --header-height: 76px;
 }
 
+/* ---- Dark theme overrides ----
+   Surfaces and text tokens swap; the header/footer/skills "ink band" and
+   the hero/contact brand gradient stay constant across both themes by
+   design (they use --color-header-bg / --gradient-brand directly, not
+   the swappable --color-ink / --color-surface tokens). */
+:root[data-theme="dark"] {
+  --color-bg: #0b0d12;
+  --color-surface: #12151c;
+  --color-surface-alt: #171b24;
+  --color-border: #262b36;
+
+  --color-ink: #eef1f6;
+  --color-ink-muted: #9aa3b2;
+
+  --color-primary: #7c93ff;
+  --color-primary-dark: #97a9ff;
+  --color-accent: #2dd4c7;
+  --color-danger: #ff6b6b;
+  --color-success: #34d399;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.32);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* No-JS fallback: honor system preference when no explicit choice was made */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #0b0d12;
+    --color-surface: #12151c;
+    --color-surface-alt: #171b24;
+    --color-border: #262b36;
+
+    --color-ink: #eef1f6;
+    --color-ink-muted: #9aa3b2;
+
+    --color-primary: #7c93ff;
+    --color-primary-dark: #97a9ff;
+    --color-accent: #2dd4c7;
+    --color-danger: #ff6b6b;
+    --color-success: #34d399;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.32);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ---- Reset / base ---- */
 *,
 *::before,
 *::after {
@@ -69,6 +139,7 @@ body {
   background-color: var(--color-bg);
   color: var(--color-ink);
   line-height: 1.6;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 img {
@@ -94,6 +165,7 @@ ul {
   margin: 0;
 }
 
+/* Respect reduced-motion preferences globally */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -110,6 +182,7 @@ ul {
   }
 }
 
+/* ---- Scroll reveal ---- */
 [data-animate] {
   opacity: 0;
   transform: translateY(24px);
@@ -122,6 +195,7 @@ ul {
   transform: translateY(0);
 }
 
+/* Visible keyboard focus everywhere */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -130,6 +204,7 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
+/* Skip link */
 .skip-link {
   position: absolute;
   left: var(--space-3);
@@ -148,8 +223,10 @@ textarea:focus-visible {
   top: var(--space-3);
 }
 
+/* ---- Section shell ---- */
 section {
   padding: var(--space-8) 8%;
+  transition: background-color var(--transition-base);
 }
 
 section > h2 {
@@ -169,6 +246,7 @@ section > h2::after {
   border-radius: var(--radius-full);
 }
 
+/* Phone-specific tightening (in addition to the 900px tablet breakpoint) */
 @media (max-width: 600px) {
   section {
     padding: var(--space-6) 6%;
@@ -189,6 +267,10 @@ section > h2::after {
   }
 }
 
+/* ==========================================================================
+   Header / Navigation
+   ========================================================================== */
+
 .site-header {
   position: fixed;
   inset: 0 0 auto 0;
@@ -208,6 +290,13 @@ section > h2::after {
   align-items: center;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Backdrop shown behind the open mobile menu; also used to lock scroll */
 .nav-scrim {
   position: fixed;
   inset: var(--header-height) 0 0 0;
@@ -291,6 +380,61 @@ body.nav-open {
   background: var(--color-accent);
 }
 
+/* Theme toggle */
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-inverse);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-toggle:active {
+  transform: scale(0.92);
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.theme-toggle-icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle-icon--moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon--sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Mobile menu toggle (hidden on desktop) */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -326,6 +470,10 @@ body.nav-open {
 }
 
 @media (max-width: 900px) {
+  .header-controls {
+    gap: var(--space-3);
+  }
+
   .menu-toggle {
     display: flex;
   }
@@ -357,6 +505,9 @@ body.nav-open {
   }
 }
 
+/* ==========================================================================
+   Hero
+   ========================================================================== */
 
 .hero {
   display: flex;
@@ -480,6 +631,9 @@ body.nav-open {
   }
 }
 
+/* ==========================================================================
+   Buttons (single source of truth)
+   ========================================================================== */
 
 .btn {
   display: inline-block;
@@ -494,7 +648,7 @@ body.nav-open {
 }
 
 .btn-primary {
-  background: var(--color-ink);
+  background: var(--color-header-bg);
   color: var(--color-inverse);
 }
 
@@ -527,6 +681,9 @@ body.nav-open {
   transform: translateY(0) scale(0.98);
 }
 
+/* ==========================================================================
+   About
+   ========================================================================== */
 
 .about {
   background: var(--color-surface);
@@ -541,6 +698,9 @@ body.nav-open {
   color: var(--color-ink-muted);
 }
 
+/* ==========================================================================
+   Skills
+   ========================================================================== */
 
 .skills {
   background: var(--color-header-bg);
@@ -592,6 +752,9 @@ body.nav-open {
   color: var(--color-inverse);
 }
 
+/* ==========================================================================
+   Projects
+   ========================================================================== */
 
 .projects {
   background: var(--color-surface);
@@ -663,12 +826,12 @@ body.nav-open {
 
 .btn-demo:hover,
 .btn-demo:focus-visible {
-  background: #0c8a86;
+  background: color-mix(in srgb, var(--color-accent) 82%, black);
   transform: scale(1.05);
 }
 
 .btn-github {
-  background: var(--color-ink);
+  background: var(--color-header-bg);
   color: var(--color-inverse);
 }
 
@@ -678,6 +841,9 @@ body.nav-open {
   transform: scale(1.05);
 }
 
+/* ==========================================================================
+   Certificates
+   ========================================================================== */
 
 .certificates {
   background: var(--color-surface-alt);
@@ -697,7 +863,7 @@ body.nav-open {
   padding: var(--space-4);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base), color var(--transition-base);
   text-align: left;
 }
 
@@ -753,6 +919,9 @@ body.nav-open {
   transform: scale(1.05);
 }
 
+/* ==========================================================================
+   Contact
+   ========================================================================== */
 
 .contact {
   background: var(--gradient-brand);
@@ -782,6 +951,7 @@ body.nav-open {
   box-shadow: var(--shadow-lg);
   color: var(--color-ink);
   animation: fade-in-up 0.6s ease;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 @keyframes fade-in-up {
@@ -809,7 +979,8 @@ body.nav-open {
   font-size: 0.95rem;
   font-family: inherit;
   background: var(--color-surface-alt);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  color: var(--color-ink);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-base), color var(--transition-base);
 }
 
 .contact-form input:focus,
@@ -847,7 +1018,7 @@ body.nav-open {
 }
 
 .btn-submit.is-success {
-  background: #1a9c6b;
+  background: var(--color-success);
 }
 
 .btn-submit.is-error {
@@ -866,7 +1037,7 @@ body.nav-open {
 }
 
 .form-status.is-success {
-  color: #1a9c6b;
+  color: var(--color-success);
 }
 
 .contact-info {
@@ -901,8 +1072,12 @@ body.nav-open {
 
 .contact-info a:hover,
 .contact-info a:focus-visible {
-  color: var(--color-ink);
+  color: var(--color-header-bg);
 }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 
 .site-footer {
   background: var(--color-header-bg);
