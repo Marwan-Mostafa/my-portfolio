@@ -15,7 +15,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="./img/m.jpg">
 
-    <link rel="icon" href="./img/Favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,85 +30,96 @@
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <header class="site-header">
-        <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">MM<span class="brand-dot">.</span></a>
+        <div class="site-header-inner">
+            <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">MM<span
+                    class="brand-dot">.</span></a>
 
-        <nav class="nav" aria-label="Primary">
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#certificates">Certificates</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+            <nav class="nav" aria-label="Primary">
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#hero" data-nav-link>Home</a></li>
+                    <li><a href="#about" data-nav-link>About</a></li>
+                    <li><a href="#skills" data-nav-link>Skills</a></li>
+                    <li><a href="#projects" data-nav-link>Projects</a></li>
+                    <li><a href="#certificates" data-nav-link>Certificates</a></li>
+                    <li><a href="#contact" data-nav-link>Contact</a></li>
+                </ul>
+            </nav>
 
-        <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="nav-menu" aria-expanded="false"
-            aria-label="Open menu">
-            <span class="menu-toggle-bar"></span>
-            <span class="menu-toggle-bar"></span>
-            <span class="menu-toggle-bar"></span>
-        </button>
+            <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="nav-menu" aria-expanded="false"
+                aria-label="Open menu">
+                <span class="menu-toggle-bar"></span>
+                <span class="menu-toggle-bar"></span>
+                <span class="menu-toggle-bar"></span>
+            </button>
+        </div>
     </header>
+    <div class="nav-scrim" id="nav-scrim" hidden></div>
 
     <main id="main-content">
         <section id="hero" class="hero" aria-labelledby="hero-heading">
-            <div class="hero-content">
-                <p class="eyebrow"><span class="eyebrow-prompt" aria-hidden="true">&gt;</span> whoami</p>
-                <h1 id="hero-heading">Marwan Mostafa</h1>
-                <p class="hero-role">Frontend Developer</p>
-                <p class="hero-lede">
-                    I'm a frontend developer with a strong passion for building modern, user-friendly web applications.
-                    I graduated from the <a href="https://www.alxafrica.com/" id="alx" target="_blank"
-                        rel="noopener noreferrer">ALX Africa</a> Software Engineering program,
-                    where I gained hands-on experience building real-world projects. I'm currently completing a degree
-                    in
-                    Mechanical Engineering while continuing to sharpen my skills in JavaScript and modern CSS &mdash;
-                    focused on responsive, high-performance interfaces that feel effortless to use.
-                </p>
-                <a href="#projects" class="btn btn-primary">View my work</a>
-            </div>
-            <div class="hero-image">
-                <img src="./img/m.jpg" alt="Portrait of Marwan Mostafa" width="300" height="300" fetchpriority="high">
+            <div class="hero-inner">
+                <div class="hero-content" data-animate>
+                    <p class="eyebrow"><span class="eyebrow-prompt" aria-hidden="true">&gt;</span> whoami</p>
+                    <h1 id="hero-heading">Marwan Mostafa</h1>
+                    <p class="hero-role">Frontend Developer</p>
+                    <p class="hero-lede">
+                        I'm a frontend developer with a strong passion for building modern, user-friendly web
+                        applications.
+                        I graduated from the <a href="https://www.alxafrica.com/" id="alx" target="_blank"
+                            rel="noopener noreferrer">ALX Africa</a> Software Engineering program,
+                        where I gained hands-on experience building real-world projects. I'm currently completing a
+                        degree in
+                        Mechanical Engineering while continuing to sharpen my skills in JavaScript and modern CSS
+                        &mdash;
+                        focused on responsive, high-performance interfaces that feel effortless to use.
+                    </p>
+                    <a href="#projects" class="btn btn-primary">View my work</a>
+                </div>
+                <div class="hero-image">
+                    <img src="./img/m.jpg" alt="Portrait of Marwan Mostafa" width="300" height="300"
+                        fetchpriority="high">
+                </div>
             </div>
         </section>
 
         <section id="about" class="about" aria-labelledby="about-heading">
             <h2 id="about-heading">About me</h2>
-            <p>
-                I'm a dedicated frontend developer who loves turning ideas into interactive and visually appealing
-                web experiences. My engineering background gives me strong problem-solving skills and close
-                attention to detail.
-            </p>
-            <a href="https://github.com/Marwan-Mostafa" target="_blank" rel="noopener noreferrer"
-                class="btn btn-outline">See my projects</a>
+            <div data-animate>
+                <p>
+                    I'm a dedicated frontend developer who loves turning ideas into interactive and visually appealing
+                    web experiences. My engineering background gives me strong problem-solving skills and close
+                    attention to detail.
+                </p>
+                <a href="https://github.com/Marwan-Mostafa" target="_blank" rel="noopener noreferrer"
+                    class="btn btn-outline">See my projects</a>
+            </div>
         </section>
 
         <section id="skills" class="skills" aria-labelledby="skills-heading">
             <h2 id="skills-heading">Skills</h2>
             <div class="skills-grid">
 
-                <div class="skill-card">
+                <div class="skill-card" data-animate>
                     <h3>HTML5</h3>
                     <p>Structure and semantic markup for web pages.</p>
                 </div>
 
-                <div class="skill-card">
+                <div class="skill-card" data-animate>
                     <h3>CSS3</h3>
                     <p>Styling, layout design, and responsive UI.</p>
                 </div>
 
-                <div class="skill-card">
+                <div class="skill-card" data-animate>
                     <h3>JavaScript</h3>
                     <p>Interactive and dynamic web experiences.</p>
                 </div>
 
-                <div class="skill-card">
+                <div class="skill-card" data-animate>
                     <h3>Tailwind CSS</h3>
                     <p>Rapidly building modern, responsive interfaces with utility classes.</p>
                 </div>
 
-                <div class="skill-card">
+                <div class="skill-card" data-animate>
                     <h3>Git &amp; GitHub</h3>
                     <p>Version control and collaboration tools.</p>
                 </div>
@@ -120,7 +131,23 @@
             <h2 id="projects-heading">Projects</h2>
             <div class="projects-grid">
 
-                <article class="project-card">
+                <article class="project-card" data-animate>
+                    <h3>Furniro Website</h3>
+                    <p>
+                        Furniro is a responsive furniture e-commerce website built with HTML5, Tailwind CSS, and Vanilla
+                        JavaScript, featuring reusable components, modular architecture, and efficient state management.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://marwan-mostafa.github.io/pages/home/home.html" target="_blank"
+                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                        <a href="https://github.com/Marwan-Mostafa/marwan-mostafa.github.io/" target="_blank"
+                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                        <a href="https://www.figma.com/design/teKWBHEEZ5dyHaCTEnXBuG/eCommerce-Website-%7C-Web-Page-Design-%7C-UI-KIT-%7C-Interior-Landing-Page--Community-?node-id=0-1&t=kwlKS2M3TABi8yIM-0"
+                            target="_blank" rel="noopener noreferrer" class="btn-demo">Figma Design</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-animate>
                     <h3>Brainwave Website</h3>
                     <p>
                         A visually striking, fully responsive landing page presenting an AI-driven platform with a
@@ -134,7 +161,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-animate>
                     <h3>To-Do List</h3>
                     <p>
                         A simple, interactive to-do list app built with vanilla JavaScript &mdash; part of my journey
@@ -148,7 +175,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-animate>
                     <h3>Professional Page</h3>
                     <p>
                         A hero landing page for a digital solutions startup helping brands turn ideas into full
@@ -162,7 +189,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-animate>
                     <h3>Profile Card Component</h3>
                     <p>
                         A simple, responsive profile card built with HTML5 and Tailwind CSS &mdash; clean typography,
@@ -176,7 +203,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-animate>
                     <h3>Testimonials Grid Section</h3>
                     <p>
                         A responsive testimonials grid built with HTML5 and CSS, highlighting client feedback in a
@@ -197,7 +224,7 @@
             <h2 id="certificates-heading">Certificates</h2>
             <div class="certificates-grid">
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/HTML & CSS.jpg" alt="HTML and CSS in Depth certificate" loading="lazy"
                         decoding="async">
                     <h3>HTML &amp; CSS in Depth</h3>
@@ -208,7 +235,7 @@
                         aria-label="View HTML and CSS in Depth certificate">View certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/Coursera JS certificate.jpg" alt="Programming JavaScript certificate" loading="lazy"
                         decoding="async">
                     <h3>Programming JavaScript</h3>
@@ -219,7 +246,7 @@
                         aria-label="View Programming JavaScript certificate">View certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/python programming certificate.jpg" alt="Programming Python certificate"
                         loading="lazy" decoding="async">
                     <h3>Programming Python</h3>
@@ -230,7 +257,7 @@
                         certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/getting-started-javascript-v2.jpg"
                         alt="Getting Started with JavaScript v2 certificate" loading="lazy" decoding="async">
                     <h3>Getting Started with JavaScript, v2</h3>
@@ -241,7 +268,7 @@
                         aria-label="View Getting Started with JavaScript v2 certificate">View certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/web-development-v3_page-0001.jpg"
                         alt="Complete Intro to Web Development v3 certificate" loading="lazy" decoding="async">
                     <h3>Complete Intro to Web Development, v3</h3>
@@ -253,7 +280,7 @@
                         aria-label="View Complete Intro to Web Development v3 certificate">View certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/css-v2.jpg" alt="Getting Started with CSS certificate" loading="lazy"
                         decoding="async">
                     <h3>Getting Started with CSS</h3>
@@ -263,7 +290,7 @@
                         class="cert-btn" aria-label="View Getting Started with CSS certificate">View certificate</a>
                 </article>
 
-                <article class="certificate-card">
+                <article class="certificate-card" data-animate>
                     <img src="img/alx-certificate.jpg" alt="ALX Africa Software Engineering Program certificate"
                         loading="lazy" decoding="async">
                     <h3>ALX Africa Software Engineering Program</h3>
@@ -281,7 +308,7 @@
             <h2 id="contact-heading">Contact me</h2>
             <div class="contact-grid">
 
-                <form class="contact-form" id="contact-form" novalidate>
+                <form class="contact-form" id="contact-form" novalidate data-animate>
                     <div class="form-field">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" placeholder="Enter your name" autocomplete="name"
@@ -307,7 +334,7 @@
                     <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
                 </form>
 
-                <div class="contact-info">
+                <div class="contact-info" data-animate>
                     <p>You can also reach me on:</p>
                     <ul>
                         <li><a href="https://linkedin.com/in/marwanmostafa1/" target="_blank"

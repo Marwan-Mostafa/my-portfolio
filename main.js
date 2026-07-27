@@ -8,31 +8,140 @@
   function initMobileNav() {
     const toggle = document.getElementById("menu-toggle");
     const menu = document.getElementById("nav-menu");
+    const scrim = document.getElementById("nav-scrim");
 
     if (!toggle || !menu) return;
 
-    toggle.addEventListener("click", function () {
-      const isOpen = menu.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", String(isOpen));
-      toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
-    });
+    function openMenu() {
+      menu.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Close menu");
+      document.body.classList.add("nav-open");
+      if (scrim) scrim.hidden = false;
+    }
 
-    // Close the menu after a link is chosen, and on Escape.
-    menu.addEventListener("click", function (event) {
-      if (event.target.tagName === "A") {
-        menu.classList.remove("is-open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open menu");
+      document.body.classList.remove("nav-open");
+      if (scrim) scrim.hidden = true;
+    }
+
+    toggle.addEventListener("click", function () {
+      if (menu.classList.contains("is-open")) {
+        closeMenu();
+      } else {
+        openMenu();
       }
     });
+
+    // Close the menu after a link is chosen, on scrim tap, and on Escape.
+    menu.addEventListener("click", function (event) {
+      if (event.target.tagName === "A") closeMenu();
+    });
+
+    if (scrim) {
+      scrim.addEventListener("click", closeMenu);
+    }
 
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && menu.classList.contains("is-open")) {
-        menu.classList.remove("is-open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
+        closeMenu();
         toggle.focus();
       }
+    });
+  }
+
+  /* ==========================================================================
+     Scrollspy — highlights the nav link for the section currently in view
+     ========================================================================== */
+
+  function initScrollSpy() {
+    const navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-nav-link]"));
+    const sections = navLinks
+      .map(function (link) {
+        const id = link.getAttribute("href").replace("#", "");
+        return document.getElementById(id);
+      })
+      .filter(Boolean);
+
+    if (!navLinks.length || !sections.length || !("IntersectionObserver" in window)) return;
+
+    const linksById = {};
+    navLinks.forEach(function (link) {
+      linksById[link.getAttribute("href").replace("#", "")] = link;
+    });
+
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          const link = linksById[entry.target.id];
+          if (!link) return;
+          if (entry.isIntersecting) {
+            navLinks.forEach(function (l) {
+              l.classList.remove("is-active");
+            });
+            link.classList.add("is-active");
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sections.forEach(function (section) {
+      observer.observe(section);
+    });
+  }
+
+  /* ==========================================================================
+     Scroll reveal — fades/rises elements into view, staggered per group
+     ========================================================================== */
+
+  function initScrollReveal() {
+    const targets = Array.prototype.slice.call(document.querySelectorAll("[data-animate]"));
+    if (!targets.length) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      targets.forEach(function (el) {
+        el.classList.add("in-view");
+      });
+      return;
+    }
+
+    const STAGGER_STEP_MS = 70;
+    const MAX_STAGGER_MS = 280;
+
+    // Stagger items that share the same parent grid (skills, projects, certificates).
+    const groups = new Map();
+    targets.forEach(function (el) {
+      const parent = el.parentElement;
+      if (!groups.has(parent)) groups.set(parent, []);
+      groups.get(parent).push(el);
+    });
+    groups.forEach(function (siblings) {
+      siblings.forEach(function (el, index) {
+        const delay = Math.min(index * STAGGER_STEP_MS, MAX_STAGGER_MS);
+        el.style.setProperty("--reveal-delay", delay + "ms");
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    targets.forEach(function (el) {
+      observer.observe(el);
     });
   }
 
@@ -140,5 +249,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     initMobileNav();
     initContactForm();
+    initScrollSpy();
+    initScrollReveal();
   });
 })();
