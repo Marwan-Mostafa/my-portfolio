@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
     <meta charset="UTF-8">
@@ -8,11 +8,15 @@
     <script>
         (function () {
             try {
-                var stored = localStorage.getItem("theme");
-                var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                var storedTheme = localStorage.getItem("theme");
+                var theme = storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
                 document.documentElement.setAttribute("data-theme", theme);
+
+                var storedLang = localStorage.getItem("lang") || "en";
+                document.documentElement.setAttribute("lang", storedLang);
+                document.documentElement.setAttribute("dir", storedLang === "ar" ? "rtl" : "ltr");
             } catch (e) {
-                /* localStorage unavailable (private mode, etc.) — default styling still applies */
+                /* localStorage unavailable (private mode, etc.) — defaults still apply */
             }
         })();
     </script>
@@ -25,21 +29,26 @@
     <meta property="og:description"
         content="Frontend developer building fast, accessible, and polished web interfaces.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="./img/m.jpg">
+    <!-- TODO: replace YOUR-DOMAIN below with your real production domain.
+         og:url and og:image MUST be absolute URLs, or link previews on
+         Facebook/Twitter/LinkedIn/WhatsApp will fail to resolve them. -->
+    <meta property="og:url" content="https://YOUR-DOMAIN.com/">
+    <meta property="og:image" content="https://YOUR-DOMAIN.com/img/maro.png">
+    <link rel="canonical" href="https://YOUR-DOMAIN.com/">
 
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Cairo:wght@500;600;700;800&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content" data-i18n="a11y.skip">Skip to main content</a>
 
     <header class="site-header">
         <div class="site-header-inner">
@@ -49,14 +58,31 @@
             <div class="header-controls">
                 <nav class="nav" aria-label="Primary">
                     <ul class="nav-menu" id="nav-menu">
-                        <li><a href="#hero" data-nav-link>Home</a></li>
-                        <li><a href="#about" data-nav-link>About</a></li>
-                        <li><a href="#skills" data-nav-link>Skills</a></li>
-                        <li><a href="#projects" data-nav-link>Projects</a></li>
-                        <li><a href="#certificates" data-nav-link>Certificates</a></li>
-                        <li><a href="#contact" data-nav-link>Contact</a></li>
+                        <li><a href="#hero" data-nav-link data-i18n="nav.home">Home</a></li>
+                        <li><a href="#about" data-nav-link data-i18n="nav.about">About</a></li>
+                        <li><a href="#skills" data-nav-link data-i18n="nav.skills">Skills</a></li>
+                        <li><a href="#projects" data-nav-link data-i18n="nav.projects">Projects</a></li>
+                        <li><a href="#activity" data-nav-link data-i18n="nav.activity">Activity</a></li>
+                        <li><a href="#certificates" data-nav-link data-i18n="nav.certificates">Certificates</a></li>
+                        <li><a href="#contact" data-nav-link data-i18n="nav.contact">Contact</a></li>
+                        <li class="nav-menu-divider" role="none"></li>
+                        <li>
+                            <button type="button" class="nav-action" id="open-palette-btn">
+                                <span data-i18n="palette.open">Quick search</span>
+                                <kbd class="nav-action-kbd">⌘K</kbd>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="nav-action" id="recruiter-toggle" aria-pressed="false">
+                                <span data-i18n="recruiter.toggleOn">🎯 Recruiter mode</span>
+                            </button>
+                        </li>
                     </ul>
                 </nav>
+
+                <button type="button" class="lang-toggle" id="lang-toggle" aria-label="Switch to Arabic">
+                    <span id="lang-toggle-label">عربي</span>
+                </button>
 
                 <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"
                     aria-label="Switch to dark theme">
@@ -86,24 +112,54 @@
     <div class="nav-scrim" id="nav-scrim" hidden></div>
 
     <main id="main-content">
+        <div class="recruiter-bar" id="recruiter-bar">
+            <p class="recruiter-bar-text">
+                <strong data-i18n="hero.role">Frontend Developer</strong>
+                <span data-i18n="recruiter.summaryNote"> · 7+ shipped projects · Available for hire</span>
+            </p>
+            <div class="recruiter-bar-actions">
+                <button type="button" class="btn btn-primary btn-sm" id="download-cv-btn"
+                    data-i18n="recruiter.downloadCV">Download CV (PDF)</button>
+                <a href="mailto:marwan.mf.tech@gmail.com" class="btn btn-outline btn-sm"
+                    data-i18n="recruiter.emailMe">Email me</a>
+            </div>
+        </div>
+
         <section id="hero" class="hero" aria-labelledby="hero-heading">
             <div class="hero-inner">
                 <div class="hero-content" data-animate>
-                    <p class="eyebrow"><span class="eyebrow-prompt" aria-hidden="true">&gt;</span> whoami</p>
+
+                    <div class="hero-terminal" data-animate>
+                        <div class="hero-terminal-bar">
+                            <span class="hero-terminal-dot hero-terminal-dot--red"></span>
+                            <span class="hero-terminal-dot hero-terminal-dot--yellow"></span>
+                            <span class="hero-terminal-dot hero-terminal-dot--green"></span>
+                            <span class="hero-terminal-title">marwan@portfolio:~</span>
+                        </div>
+                        <div class="hero-terminal-body" id="terminal-body" aria-live="polite">
+                            <p class="hero-terminal-line hero-terminal-line--muted">Type <strong>help</strong> and press
+                                Enter to explore.</p>
+                        </div>
+                        <div class="hero-terminal-input-row">
+                            <span class="hero-terminal-prompt" aria-hidden="true">&gt;</span>
+                            <input type="text" id="terminal-input" class="hero-terminal-input"
+                                aria-label="Interactive terminal command input" autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+
                     <h1 id="hero-heading">Marwan Mostafa</h1>
-                    <p class="hero-role">Frontend Developer</p>
-                    <p class="hero-lede">
+                    <p class="hero-role" data-i18n="hero.role">Frontend Developer</p>
+                    <p class="hero-lede" data-i18n="hero.lede">
                         Frontend Developer specializing in HTML5, CSS3, Tailwind CSS, and JavaScript (ES6+).
                         Graduate of the <a href="https://www.alxafrica.com/" id="alx" target="_blank"
                             rel="noopener noreferrer">ALX Africa</a> Software Engineering program, experienced in
                         building responsive, accessible web applications and converting Figma designs into scalable,
                         pixel-perfect interfaces.
-
-                        Proficient in reusable component architecture, DOM manipulation REST API integration, state
-                        management, performance optimization, semantic HTML with a
-                        strong focus on clean, maintainable, and efficient code.
+                        Proficient in reusable component architecture, DOM manipulation, REST API integration, state
+                        management, performance optimization, and semantic HTML, with a strong focus on clean,
+                        maintainable, and efficient code.
                     </p>
-                    <a href="#projects" class="btn btn-primary">View my work</a>
+                    <a href="#projects" class="btn btn-primary" data-i18n="hero.cta">View my work</a>
                 </div>
                 <div class="hero-image">
                     <img src="./img/maro.png" alt="Portrait of Marwan Mostafa" width="300" height="300"
@@ -113,262 +169,283 @@
         </section>
 
         <section id="about" class="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">About me</h2>
+            <h2 id="about-heading" data-i18n="about.heading">About me</h2>
             <div data-animate>
-                <p>
+                <p data-i18n="about.text">
                     I specialize in building responsive web applications that combine clean implementation with
                     intuitive user experiences. My approach emphasizes semantic code, reusable components, performance
                     optimization, and accessibility to create interfaces that are both reliable and easy to maintain.
                 </p>
                 <a href="https://github.com/Marwan-Mostafa" target="_blank" rel="noopener noreferrer"
-                    class="btn btn-outline">See my projects</a>
+                    class="btn btn-outline" data-i18n="about.cta">See my projects</a>
             </div>
         </section>
 
         <section id="skills" class="skills" aria-labelledby="skills-heading">
-            <h2 id="skills-heading">Skills</h2>
+            <h2 id="skills-heading" data-i18n="skills.heading">Skills</h2>
             <div class="skills-grid">
 
                 <div class="skill-card" data-animate>
-                    <h3>HTML5</h3>
-                    <p>Structure and semantic markup for web pages.</p>
+                    <h3 data-i18n="skills.html.title">HTML5</h3>
+                    <p data-i18n="skills.html.desc">Structure and semantic markup for web pages.</p>
                 </div>
 
                 <div class="skill-card" data-animate>
-                    <h3>CSS3</h3>
-                    <p>Styling, layout design, and responsive UI.</p>
+                    <h3 data-i18n="skills.css.title">CSS3</h3>
+                    <p data-i18n="skills.css.desc">Styling, layout design, and responsive UI.</p>
                 </div>
 
                 <div class="skill-card" data-animate>
-                    <h3>JavaScript</h3>
-                    <p>Interactive and dynamic web experiences.</p>
+                    <h3 data-i18n="skills.js.title">JavaScript</h3>
+                    <p data-i18n="skills.js.desc">Interactive and dynamic web experiences.</p>
                 </div>
 
                 <div class="skill-card" data-animate>
-                    <h3>Tailwind CSS</h3>
-                    <p>Rapidly building modern, responsive interfaces with utility classes.</p>
+                    <h3 data-i18n="skills.tailwind.title">Tailwind CSS</h3>
+                    <p data-i18n="skills.tailwind.desc">Rapidly building modern, responsive interfaces with utility
+                        classes.</p>
                 </div>
 
                 <div class="skill-card" data-animate>
-                    <h3>Git &amp; GitHub</h3>
-                    <p>Version control and collaboration tools.</p>
+                    <h3 data-i18n="skills.git.title">Git &amp; GitHub</h3>
+                    <p data-i18n="skills.git.desc">Version control and collaboration tools.</p>
                 </div>
 
             </div>
         </section>
 
         <section id="projects" class="projects" aria-labelledby="projects-heading">
-            <h2 id="projects-heading">Projects</h2>
+            <h2 id="projects-heading" data-i18n="projects.heading">Projects</h2>
             <div class="projects-grid">
 
-                <article class="project-card" data-animate>
+                <article class="project-card" data-animate data-tier="primary">
                     <h3>Furniro Website</h3>
-                    <p>
+                    <p data-i18n="projects.furniro.desc">
                         Furniro is a responsive furniture e-commerce website built with HTML5, Tailwind CSS, and Vanilla
                         JavaScript, featuring reusable components, modular architecture, and efficient state management.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/pages/home/home.html" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/marwan-mostafa.github.io/" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                         <a href="https://www.figma.com/design/teKWBHEEZ5dyHaCTEnXBuG/eCommerce-Website-%7C-Web-Page-Design-%7C-UI-KIT-%7C-Interior-Landing-Page--Community-?node-id=0-1&t=kwlKS2M3TABi8yIM-0"
-                            target="_blank" rel="noopener noreferrer" class="btn-demo">Figma Design</a>
+                            target="_blank" rel="noopener noreferrer" class="btn-figma" data-i18n="projects.figma">Figma
+                            Design</a>
                     </div>
                 </article>
 
-
-
-                <article class="project-card" data-animate>
-                    <span class="project-badge">Featured</span>
+                <article class="project-card" data-animate data-tier="primary">
+                    <span class="project-badge" data-i18n="projects.featured">Featured</span>
                     <h3>Brainwave Website</h3>
-                    <p>
+                    <p data-i18n="projects.brainwave.desc">
                         A visually striking, fully responsive landing page presenting an AI-driven platform with a
                         modern, tech-centric identity and a premium, product-grade feel.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/Brainwave-website/" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/Brainwave-website" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                     </div>
                 </article>
 
-                <article class="project-card" data-animate>
+                <article class="project-card" data-animate data-tier="secondary">
                     <h3>To-Do List</h3>
-                    <p>
+                    <p data-i18n="projects.todo.desc">
                         A simple, interactive to-do list app built with vanilla JavaScript &mdash; part of my journey
                         applying core JavaScript by building real-world projects.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/todo-list-app-vanilla-js/" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/todo-list-app-vanilla-js" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                     </div>
                 </article>
 
-                <article class="project-card" data-animate>
+                <article class="project-card" data-animate data-tier="primary">
                     <h3>Professional Page</h3>
-                    <p>
+                    <p data-i18n="projects.professional.desc">
                         A hero landing page for a digital solutions startup helping brands turn ideas into full
                         digital experiences and launch strong, Arabic-first brands in the market.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/professional-landing-page/" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/professional-landing-page" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                     </div>
                 </article>
 
-                <article class="project-card" data-animate>
+                <article class="project-card" data-animate data-tier="secondary">
                     <h3>Profile Card Component</h3>
-                    <p>
+                    <p data-i18n="projects.profileCard.desc">
                         A simple, responsive profile card built with HTML5 and Tailwind CSS &mdash; clean typography,
                         a modern layout, and hover effects, reusable across portfolios and team sections.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/profile-card-component/" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/profile-card-component/" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                     </div>
                 </article>
 
-                <article class="project-card" data-animate>
+                <article class="project-card" data-animate data-tier="secondary">
                     <h3>Testimonials Grid Section</h3>
-                    <p>
+                    <p data-i18n="projects.testimonials.desc">
                         A responsive testimonials grid built with HTML5 and CSS, highlighting client feedback in a
                         modern grid layout with clean typography and structured components.
                     </p>
                     <div class="project-links">
                         <a href="https://marwan-mostafa.github.io/testimonials-grid-section-main/" target="_blank"
-                            rel="noopener noreferrer" class="btn-demo">Live demo</a>
+                            rel="noopener noreferrer" class="btn-demo" data-i18n="projects.liveDemo">Live demo</a>
                         <a href="https://github.com/Marwan-Mostafa/testimonials-grid-section-main" target="_blank"
-                            rel="noopener noreferrer" class="btn-github">GitHub</a>
+                            rel="noopener noreferrer" class="btn-github" data-i18n="projects.github">GitHub</a>
                     </div>
                 </article>
 
             </div>
         </section>
 
-        <section id="certificates" class="certificates" aria-labelledby="certificates-heading">
-            <h2 id="certificates-heading">Certificates</h2>
-            <div class="certificates-grid">
+        <section id="activity" class="activity" aria-labelledby="activity-heading">
+            <h2 id="activity-heading" data-i18n="activity.heading">Latest on GitHub</h2>
+            <p class="activity-subtitle" data-i18n="activity.subtitle">Live data pulled directly from my GitHub profile
+                — updates automatically, no manual edits needed.</p>
+            <div class="activity-grid" id="activity-grid" aria-live="polite">
+                <div class="activity-card activity-skeleton"></div>
+                <div class="activity-card activity-skeleton"></div>
+                <div class="activity-card activity-skeleton"></div>
+            </div>
+            <a href="https://github.com/Marwan-Mostafa" target="_blank" rel="noopener noreferrer"
+                class="btn btn-outline" data-i18n="activity.viewProfile">View full GitHub profile</a>
+        </section>
 
-                <article class="certificate-card" data-animate>
-                    <img src="img/alx-certificate.jpg" alt="ALX Africa Software Engineering Program certificate"
-                        loading="lazy" decoding="async">
-                    <h3>ALX Africa Software Engineering Program</h3>
-                    <p>Comprehensive software engineering program specializing in backend development.</p>
-                    <span class="org">by ALX Africa</span>
-                    <a href="https://www.alxafrica.com/certificate-link" target="_blank" rel="noopener noreferrer"
-                        class="cert-btn" aria-label="View ALX Africa Software Engineering Program certificate">View
-                        certificate</a>
-                </article>
+        <section id="certificates" class="certificates" aria-labelledby="certificates-heading">
+            <h2 id="certificates-heading" data-i18n="certificates.heading">Certificates</h2>
+            <div class="certificates-grid">
 
                 <article class="certificate-card" data-animate>
                     <img src="img/HTML%20&%20CSS.jpg" alt="HTML and CSS in Depth certificate" loading="lazy"
                         decoding="async">
                     <h3>HTML &amp; CSS in Depth</h3>
-                    <p>Advanced knowledge of semantic HTML and modern CSS techniques.</p>
+                    <p data-i18n="certificates.htmlcss.desc">Advanced knowledge of semantic HTML and modern CSS
+                        techniques.</p>
                     <span class="org">by Coursera</span>
                     <a href="https://coursera.org/share/69bf1e17381133d9d328c72b0ce07985" target="_blank"
-                        rel="noopener noreferrer" class="cert-btn"
-                        aria-label="View HTML and CSS in Depth certificate">View certificate</a>
+                        rel="noopener noreferrer" class="cert-btn" aria-label="View HTML and CSS in Depth certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
                 <article class="certificate-card" data-animate>
                     <img src="img/Coursera%20JS%20certificate.jpg" alt="Programming JavaScript certificate"
                         loading="lazy" decoding="async">
                     <h3>Programming JavaScript</h3>
-                    <p>Advanced knowledge of JavaScript.</p>
+                    <p data-i18n="certificates.js.desc">Advanced knowledge of JavaScript.</p>
                     <span class="org">by Coursera</span>
                     <a href="https://coursera.org/share/523a8cc4f23b9dc050d6b8174f850872" target="_blank"
-                        rel="noopener noreferrer" class="cert-btn"
-                        aria-label="View Programming JavaScript certificate">View certificate</a>
+                        rel="noopener noreferrer" class="cert-btn" aria-label="View Programming JavaScript certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
                 <article class="certificate-card" data-animate>
                     <img src="img/python%20programming%20certificate.jpg" alt="Programming Python certificate"
                         loading="lazy" decoding="async">
                     <h3>Programming Python</h3>
-                    <p>Advanced knowledge of Python.</p>
+                    <p data-i18n="certificates.python.desc">Advanced knowledge of Python.</p>
                     <span class="org">by Coursera</span>
                     <a href="https://coursera.org/share/c0c537bd1179672f1e18ba1515c756d9" target="_blank"
-                        rel="noopener noreferrer" class="cert-btn" aria-label="View Programming Python certificate">View
-                        certificate</a>
+                        rel="noopener noreferrer" class="cert-btn" aria-label="View Programming Python certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
                 <article class="certificate-card" data-animate>
                     <img src="img/getting-started-javascript-v2.jpg"
                         alt="Getting Started with JavaScript v2 certificate" loading="lazy" decoding="async">
                     <h3>Getting Started with JavaScript, v2</h3>
-                    <p>A beginner-friendly course covering JavaScript, culminating in building a Wordle clone.</p>
+                    <p data-i18n="certificates.jsv2.desc">A beginner-friendly course covering JavaScript, culminating in
+                        building a Wordle clone.</p>
                     <span class="org">by Frontend Masters</span>
                     <a href="https://frontendmasters.com/courses/getting-started-javascript-v2/" target="_blank"
                         rel="noopener noreferrer" class="cert-btn"
-                        aria-label="View Getting Started with JavaScript v2 certificate">View certificate</a>
+                        aria-label="View Getting Started with JavaScript v2 certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
                 <article class="certificate-card" data-animate>
                     <img src="img/web-development-v3_page-0001.jpg"
                         alt="Complete Intro to Web Development v3 certificate" loading="lazy" decoding="async">
                     <h3>Complete Intro to Web Development, v3</h3>
-                    <p>A beginner-friendly course covering HTML, CSS, and JavaScript, culminating in building a Wordle
-                        clone.</p>
+                    <p data-i18n="certificates.webdev.desc">A beginner-friendly course covering HTML, CSS, and
+                        JavaScript, culminating in building a Wordle clone.</p>
                     <span class="org">by Frontend Masters</span>
                     <a href="https://frontendmasters.com/courses/web-development-v3/" target="_blank"
                         rel="noopener noreferrer" class="cert-btn"
-                        aria-label="View Complete Intro to Web Development v3 certificate">View certificate</a>
+                        aria-label="View Complete Intro to Web Development v3 certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
                 <article class="certificate-card" data-animate>
                     <img src="img/css-v2.jpg" alt="Getting Started with CSS certificate" loading="lazy"
                         decoding="async">
                     <h3>Getting Started with CSS</h3>
-                    <p>Introduction to CSS fundamentals and responsive design.</p>
+                    <p data-i18n="certificates.css.desc">Introduction to CSS fundamentals and responsive design.</p>
                     <span class="org">by Frontend Masters</span>
                     <a href="https://frontendmasters.com/certificate-link" target="_blank" rel="noopener noreferrer"
-                        class="cert-btn" aria-label="View Getting Started with CSS certificate">View certificate</a>
+                        class="cert-btn" aria-label="View Getting Started with CSS certificate"
+                        data-i18n="certificates.view">View certificate</a>
+                </article>
+
+                <article class="certificate-card" data-animate>
+                    <img src="img/alx-certificate.jpg" alt="ALX Africa Software Engineering Program certificate"
+                        loading="lazy" decoding="async">
+                    <h3>ALX Africa Software Engineering Program</h3>
+                    <p data-i18n="certificates.alx.desc">Comprehensive software engineering program specializing in
+                        backend development.</p>
+                    <span class="org">by ALX Africa</span>
+                    <a href="https://www.alxafrica.com/certificate-link" target="_blank" rel="noopener noreferrer"
+                        class="cert-btn" aria-label="View ALX Africa Software Engineering Program certificate"
+                        data-i18n="certificates.view">View certificate</a>
                 </article>
 
             </div>
+            <p class="certificates-note" id="certificates-note" data-i18n="recruiter.certNote">+4 additional
+                certificates available — ask and I'll share them.</p>
         </section>
 
         <section id="contact" class="contact" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Contact me</h2>
+            <h2 id="contact-heading" data-i18n="contact.heading">Contact me</h2>
             <div class="contact-grid">
 
                 <form class="contact-form" id="contact-form" novalidate data-animate>
                     <div class="form-field">
-                        <label for="name">Name</label>
+                        <label for="name" data-i18n="contact.name">Name</label>
                         <input type="text" id="name" name="name" placeholder="Enter your name" autocomplete="name"
-                            required>
+                            required data-i18n-placeholder="contact.namePlaceholder">
                     </div>
 
                     <div class="form-field">
-                        <label for="email">Email</label>
+                        <label for="email" data-i18n="contact.email">Email</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email"
-                            required>
+                            required data-i18n-placeholder="contact.emailPlaceholder">
                     </div>
 
                     <div class="form-field">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Write your message"
-                            required></textarea>
+                        <label for="message" data-i18n="contact.message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Write your message" required
+                            data-i18n-placeholder="contact.messagePlaceholder"></textarea>
                     </div>
 
                     <button type="submit" class="btn-submit" id="submit-btn">
-                        <span class="btn-submit-label">Send message</span>
+                        <span class="btn-submit-label" data-i18n="contact.send">Send message</span>
                     </button>
 
                     <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
                 </form>
 
                 <div class="contact-info" data-animate>
-                    <p>You can also reach me on:</p>
+                    <p data-i18n="contact.reachMe">You can also reach me on:</p>
                     <ul>
                         <li><a href="https://linkedin.com/in/marwanmostafa1/" target="_blank"
                                 rel="noopener noreferrer"><span aria-hidden="true">💼</span> LinkedIn</a></li>
@@ -376,14 +453,38 @@
                                     aria-hidden="true">💻</span> GitHub</a></li>
                         <li><a href="mailto:marwan.mf.tech@gmail.com"><span aria-hidden="true">📧</span> Email</a></li>
                     </ul>
+
+                    <div class="save-contact">
+                        <p class="save-contact-label" data-i18n="vcard.label">Save my contact instantly:</p>
+                        <div class="save-contact-row">
+                            <button type="button" class="btn btn-outline btn-sm" id="vcard-btn"
+                                data-i18n="vcard.button">Download vCard (.vcf)</button>
+                            <img class="save-contact-qr" id="contact-qr"
+                                alt="QR code to save Marwan Mostafa's contact details" width="96" height="96">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
-        <p>&copy; 2025 Marwan Mostafa. All rights reserved.</p>
+        <p>&copy; <span id="footer-year">2026</span> <span data-i18n="footer.rights">Marwan Mostafa. All rights
+                reserved.</span></p>
     </footer>
+
+    <div class="command-palette" id="command-palette" hidden>
+        <div class="command-palette-backdrop" id="command-palette-backdrop"></div>
+        <div class="command-palette-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+            <div class="command-palette-search">
+                <span aria-hidden="true">⌘</span>
+                <input type="text" id="command-input" class="command-palette-input"
+                    placeholder="Type a command or search…" autocomplete="off" spellcheck="false"
+                    data-i18n-placeholder="palette.placeholder">
+            </div>
+            <ul class="command-palette-list" id="command-list" role="listbox"></ul>
+        </div>
+    </div>
 
     <script src="main.js" defer></script>
 </body>
