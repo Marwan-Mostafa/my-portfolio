@@ -1,12 +1,3 @@
-/* ==========================================================================
-   Marwan Mostafa — Portfolio
-   Design system: tokens → base/reset → layout → components → utilities
-   ========================================================================== */
-
-/* ---- Fonts ---- */
-/* Space Grotesk: display/headings · Inter: body copy · IBM Plex Mono: eyebrows/labels */
-
-/* ---- Design tokens ---- */
 :root {
   /* Color: surfaces */
   --color-bg: #fafbfc;
@@ -46,6 +37,8 @@
   --space-6: 3rem;      /* 48px */
   --space-7: 4rem;      /* 64px */
   --space-8: 6rem;      /* 96px */
+  --space-9: 8rem;      /* 96px */
+  --space-10: 10rem;      /* 96px */
 
   /* Radius */
   --radius-sm: 8px;
@@ -69,7 +62,7 @@
   --shadow-brand-md: 0 20px 40px rgba(41, 84, 229, 0.22);
 
   /* Layout */
-  --container-width: 1180px;
+  --container-width: 1380px;
   --header-height: 76px;
 }
 
@@ -214,7 +207,7 @@ textarea:focus-visible {
 .btn-figma:focus-visible,
 .cert-btn:focus-visible,
 .btn-submit:focus-visible,
-.theme-toggle:focus-visible,
+.header-icon-btn:focus-visible,
 .lang-toggle:focus-visible,
 .menu-toggle:focus-visible {
   outline: none;
@@ -296,6 +289,12 @@ section > h2::after {
   background: rgba(18, 21, 28, 0.92);
   backdrop-filter: blur(8px);
   z-index: 1000;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0);
+  transition: box-shadow var(--transition-base);
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .site-header-inner {
@@ -309,8 +308,9 @@ section > h2::after {
 
 .header-controls {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-10);
 }
 
 /* Backdrop shown behind the open mobile menu; also used to lock scroll */
@@ -332,11 +332,12 @@ body.palette-open {
 
 .brand {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: clamp(0.95rem, 2.6vw, 1.25rem);
   font-weight: 700;
   color: var(--color-inverse);
   text-decoration: none;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
   transition: color var(--transition-fast);
 }
 
@@ -351,7 +352,7 @@ body.palette-open {
 .nav-menu {
   list-style: none;
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-4);
   padding: 0;
 }
 
@@ -398,60 +399,6 @@ body.palette-open {
   background: var(--color-accent);
 }
 
-/* Theme toggle */
-.theme-toggle {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-inverse);
-  cursor: pointer;
-  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.theme-toggle:hover,
-.theme-toggle:focus-visible {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.theme-toggle:active {
-  transform: scale(0.92);
-}
-
-.theme-toggle-icon {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  transition: opacity var(--transition-base), transform var(--transition-base);
-}
-
-.theme-toggle-icon--sun {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-.theme-toggle-icon--moon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.5);
-}
-
-:root[data-theme="dark"] .theme-toggle-icon--sun {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.5);
-}
-
-:root[data-theme="dark"] .theme-toggle-icon--moon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
 /* Mobile menu toggle (hidden on desktop) */
 .menu-toggle {
   display: none;
@@ -487,11 +434,7 @@ body.palette-open {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 900px) {
-  .header-controls {
-    gap: var(--space-3);
-  }
-
+@media (max-width: 1100px) {
   .menu-toggle {
     display: flex;
   }
@@ -520,6 +463,32 @@ body.palette-open {
 
   .nav-menu a {
     font-size: 1.1rem;
+  }
+}
+
+/* Smallest phones (360-400px): the always-visible utility cluster (search,
+   recruiter, language, theme) plus the hamburger is tight next to a full
+   name wordmark — shrink the controls a touch rather than truncating text. */
+@media (max-width: 400px) {
+  .brand {
+    font-size: 0.85rem;
+  }
+
+  .header-icon-btn,
+  .menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .lang-toggle {
+    height: 36px;
+    padding: 0 var(--space-2);
+    font-size: 0.78rem;
   }
 }
 
@@ -1230,95 +1199,99 @@ body.palette-open {
 }
 
 /* ==========================================================================
-   Language toggle
+   Header utility cluster (search / recruiter mode / language / theme)
+   Shared base class keeps every icon-only header control visually
+   identical — same size, border, background, hover, and press feedback —
+   instead of each button re-declaring its own box model.
    ========================================================================== */
 
-.lang-toggle {
+.header-utility {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header-icon-btn {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
   height: 40px;
-  padding: 0 var(--space-3);
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.06);
   color: var(--color-inverse);
-  font-family: "Cairo", var(--font-body);
-  font-weight: 600;
-  font-size: 0.85rem;
   cursor: pointer;
   transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
-.lang-toggle:hover,
-.lang-toggle:focus-visible {
+.header-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.header-icon-btn:hover,
+.header-icon-btn:focus-visible {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.lang-toggle:active {
-  transform: scale(0.94);
+.header-icon-btn:active {
+  transform: scale(0.92);
 }
 
-/* ==========================================================================
-   Nav actions (Quick search / Recruiter mode) inside the nav-menu
-   ========================================================================== */
-
-.nav-menu-divider {
-  display: none;
-}
-
-.nav-action {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  background: transparent;
-  border: none;
-  color: var(--color-inverse-muted);
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: var(--space-2) 0;
-  transition: color var(--transition-base);
-}
-
-.nav-action:hover,
-.nav-action:focus-visible {
-  color: var(--color-inverse);
-}
-
-.nav-action[aria-pressed="true"] {
+.header-icon-btn[aria-pressed="true"] {
   color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
-.nav-action-kbd {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 1px 6px;
+/* Language toggle shares the same treatment but keeps a text label, so it's
+   a pill rather than a circle — width auto instead of the fixed 40px. */
+.lang-toggle {
+  width: auto;
+  padding: 0 var(--space-3);
+  font-family: "Cairo", var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
-@media (max-width: 900px) {
-  .nav-menu-divider {
-    display: block;
-    width: 60%;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.14);
-    margin: var(--space-2) 0;
+/* Theme toggle icon crossfade (sun/moon) */
+.theme-toggle-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.theme-toggle-icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle-icon--moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon--sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+@media (max-width: 1100px) {
+  .header-utility {
+    gap: var(--space-1);
   }
-
-  .nav-action {
-    font-size: 1rem;
-  }
 }
 
-/* ==========================================================================
-   Hero terminal (interactive "> whoami" — extended into a real mini shell)
-   ========================================================================== */
 
 .hero-terminal {
   background: rgba(10, 12, 18, 0.55);
@@ -1523,26 +1496,13 @@ body.palette-open {
   flex-wrap: wrap;
   gap: var(--space-3);
   padding: var(--space-4) 8%;
-  /* The header is position:fixed and sits on top of normal document flow,
-     so without this the bar rendered underneath it and looked broken/hidden.
-     This pushes it down to start exactly where the fixed header ends. */
-  margin-top: var(--header-height);
   background: var(--color-header-bg);
   color: var(--color-inverse);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 10;
 }
 
 body.recruiter-mode .recruiter-bar {
   display: flex;
-}
-
-/* When the recruiter bar is showing, the hero no longer starts right under
-   the fixed header — its own top padding would otherwise stack with the
-   bar's height and push content down twice. */
-body.recruiter-mode .hero {
-  scroll-margin-top: 0;
 }
 
 .recruiter-bar-text {
@@ -1591,7 +1551,7 @@ body.recruiter-mode .certificates-note {
 .activity-subtitle {
   color: var(--color-ink-muted);
   font-size: 0.95rem;
-  margin: 0 auto var(--space-6);
+  margin: calc(-1 * var(--space-4)) auto var(--space-6);
   max-width: 560px;
 }
 

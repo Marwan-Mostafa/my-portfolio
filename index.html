@@ -29,12 +29,7 @@
     <meta property="og:description"
         content="Frontend developer building fast, accessible, and polished web interfaces.">
     <meta property="og:type" content="website">
-    <!-- TODO: replace YOUR-DOMAIN below with your real production domain.
-         og:url and og:image MUST be absolute URLs, or link previews on
-         Facebook/Twitter/LinkedIn/WhatsApp will fail to resolve them. -->
-    <meta property="og:url" content="https://YOUR-DOMAIN.com/">
-    <meta property="og:image" content="https://YOUR-DOMAIN.com/img/maro.png">
-    <link rel="canonical" href="https://YOUR-DOMAIN.com/">
+    <meta property="og:image" content="./img/maro.png">
 
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
 
@@ -50,10 +45,9 @@
 <body>
     <a class="skip-link" href="#main-content" data-i18n="a11y.skip">Skip to main content</a>
 
-    <header class="site-header">
+    <header class="site-header" id="site-header">
         <div class="site-header-inner">
-            <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">MM<span
-                    class="brand-dot">.</span></a>
+            <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">Marwan Mostafa<span class="brand-dot">.</span></a>
 
             <div class="header-controls">
                 <nav class="nav" aria-label="Primary">
@@ -65,40 +59,49 @@
                         <li><a href="#activity" data-nav-link data-i18n="nav.activity">Activity</a></li>
                         <li><a href="#certificates" data-nav-link data-i18n="nav.certificates">Certificates</a></li>
                         <li><a href="#contact" data-nav-link data-i18n="nav.contact">Contact</a></li>
-                        <li class="nav-menu-divider" role="none"></li>
-                        <li>
-                            <button type="button" class="nav-action" id="open-palette-btn">
-                                <span data-i18n="palette.open">Quick search</span>
-                                <kbd class="nav-action-kbd">⌘K</kbd>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="nav-action" id="recruiter-toggle" aria-pressed="false">
-                                <span data-i18n="recruiter.toggleOn">🎯 Recruiter mode</span>
-                            </button>
-                        </li>
                     </ul>
                 </nav>
 
-                <button type="button" class="lang-toggle" id="lang-toggle" aria-label="Switch to Arabic">
-                    <span id="lang-toggle-label">عربي</span>
-                </button>
+                <div class="header-utility" role="group" aria-label="Utilities">
+                    <button type="button" class="header-icon-btn" id="open-palette-btn"
+                        aria-label="Quick search (Ctrl/Cmd + K)" title="Quick search (Ctrl/Cmd + K)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
 
-                <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"
-                    aria-label="Switch to dark theme">
-                    <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path
-                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41">
-                        </path>
-                    </svg>
-                    <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        aria-hidden="true">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
-                    </svg>
-                </button>
+                    <button type="button" class="header-icon-btn" id="recruiter-toggle" aria-pressed="false"
+                        aria-label="Toggle recruiter mode" title="Recruiter mode">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+                            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path>
+                        </svg>
+                    </button>
+
+                    <button type="button" class="header-icon-btn lang-toggle" id="lang-toggle"
+                        aria-label="Switch to Arabic">
+                        <span id="lang-toggle-label">عربي</span>
+                    </button>
+
+                    <button type="button" class="header-icon-btn" id="theme-toggle" aria-pressed="false"
+                        aria-label="Switch to dark theme">
+                        <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path
+                                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41">
+                            </path>
+                        </svg>
+                        <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+                        </svg>
+                    </button>
+                </div>
 
                 <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="nav-menu"
                     aria-expanded="false" aria-label="Open menu">
@@ -327,6 +330,18 @@
             <div class="certificates-grid">
 
                 <article class="certificate-card" data-animate>
+                    <img src="img/alx-certificate.jpg" alt="ALX Africa Software Engineering Program certificate"
+                        loading="lazy" decoding="async">
+                    <h3>ALX Africa Software Engineering Program</h3>
+                    <p data-i18n="certificates.alx.desc">Comprehensive software engineering program specializing in
+                        backend development.</p>
+                    <span class="org">by ALX Africa</span>
+                    <a href="https://www.alxafrica.com/certificate-link" target="_blank" rel="noopener noreferrer"
+                        class="cert-btn" aria-label="View ALX Africa Software Engineering Program certificate"
+                        data-i18n="certificates.view">View certificate</a>
+                </article>
+
+                <article class="certificate-card" data-animate>
                     <img src="img/HTML%20&%20CSS.jpg" alt="HTML and CSS in Depth certificate" loading="lazy"
                         decoding="async">
                     <h3>HTML &amp; CSS in Depth</h3>
@@ -397,17 +412,7 @@
                         data-i18n="certificates.view">View certificate</a>
                 </article>
 
-                <article class="certificate-card" data-animate>
-                    <img src="img/alx-certificate.jpg" alt="ALX Africa Software Engineering Program certificate"
-                        loading="lazy" decoding="async">
-                    <h3>ALX Africa Software Engineering Program</h3>
-                    <p data-i18n="certificates.alx.desc">Comprehensive software engineering program specializing in
-                        backend development.</p>
-                    <span class="org">by ALX Africa</span>
-                    <a href="https://www.alxafrica.com/certificate-link" target="_blank" rel="noopener noreferrer"
-                        class="cert-btn" aria-label="View ALX Africa Software Engineering Program certificate"
-                        data-i18n="certificates.view">View certificate</a>
-                </article>
+
 
             </div>
             <p class="certificates-note" id="certificates-note" data-i18n="recruiter.certNote">+4 additional
@@ -469,8 +474,7 @@
     </main>
 
     <footer class="site-footer">
-        <p>&copy; <span id="footer-year">2026</span> <span data-i18n="footer.rights">Marwan Mostafa. All rights
-                reserved.</span></p>
+        <p data-i18n="footer.rights">&copy; 2025 Marwan Mostafa. All rights reserved.</p>
     </footer>
 
     <div class="command-palette" id="command-palette" hidden>
