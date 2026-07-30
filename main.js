@@ -1,10 +1,6 @@
 (function () {
   "use strict";
 
-  /* ==========================================================================
-     Theme toggle (light / dark)
-     ========================================================================== */
-
   function initThemeToggle() {
     const toggle = document.getElementById("theme-toggle");
     const root = document.documentElement;
@@ -22,11 +18,9 @@
       try {
         localStorage.setItem("theme", theme);
       } catch (e) {
-        /* localStorage unavailable — theme still applies for this session */
       }
     }
 
-    // Sync button state with whatever the anti-flash inline script already set.
     applyTheme(currentTheme());
 
     toggle.addEventListener("click", function () {
@@ -34,9 +28,6 @@
     });
   }
 
-  /* ==========================================================================
-     Header scroll elevation
-     ========================================================================== */
 
   function initHeaderScrollElevation() {
     const header = document.getElementById("site-header");
@@ -63,10 +54,6 @@
 
     update();
   }
-
-  /* ==========================================================================
-     Mobile navigation toggle
-     ========================================================================== */
 
   function initMobileNav() {
     const toggle = document.getElementById("menu-toggle");
@@ -99,7 +86,6 @@
       }
     });
 
-    // Close the menu after a link is chosen, on scrim tap, and on Escape.
     menu.addEventListener("click", function (event) {
       if (event.target.tagName === "A") closeMenu();
     });
@@ -116,9 +102,6 @@
     });
   }
 
-  /* ==========================================================================
-     Scrollspy — highlights the nav link for the section currently in view
-     ========================================================================== */
 
   function initScrollSpy() {
     const navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-nav-link]"));
@@ -157,9 +140,6 @@
     });
   }
 
-  /* ==========================================================================
-     Scroll reveal — fades/rises elements into view, staggered per group
-     ========================================================================== */
 
   function initScrollReveal() {
     const targets = Array.prototype.slice.call(document.querySelectorAll("[data-animate]"));
@@ -208,25 +188,11 @@
     });
   }
 
-  /* ==========================================================================
-     Contact form
-     ========================================================================== */
-
-  // ⚠️ ACTION REQUIRED BEFORE GOING LIVE ⚠️
-  // This still points at a placeholder Formspree ID. Every submission will
-  // fail (404) until you replace it with your real endpoint:
-  //   1. Create a free form at https://formspree.io (or any provider you prefer)
-  //   2. Copy the endpoint URL it gives you, e.g. https://formspree.io/f/abc123xy
-  //   3. Paste it below, replacing the placeholder.
-  // Until this is fixed, the form will show a clear "not connected yet"
-  // message to visitors instead of silently failing.
   const FORM_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID";
   const FORM_ENDPOINT_IS_CONFIGURED = FORM_ENDPOINT.indexOf("REPLACE_WITH_YOUR_FORM_ID") === -1;
 
   const SUCCESS_MESSAGE_DURATION_MS = 3000;
 
-  // Simple, permissive email shape check — good enough to catch obvious
-  // typos ("name@", "name@site") without rejecting valid real-world addresses.
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function initContactForm() {
@@ -310,8 +276,6 @@
       }
 
       if (!FORM_ENDPOINT_IS_CONFIGURED) {
-        // Fail fast with a clear, honest message instead of a silent 404 —
-        // remove this whole block once FORM_ENDPOINT is set for real.
         setErrorState(t("contact.notConfigured"));
         return;
       }
@@ -329,9 +293,6 @@
     });
   }
 
-  /* ==========================================================================
-     i18n (English / Arabic)
-     ========================================================================== */
 
   const I18N = {
     en: {
@@ -542,7 +503,6 @@
     try {
       localStorage.setItem("lang", lang);
     } catch (e) {
-      /* localStorage unavailable — language still applies for this session */
     }
 
     renderActivityFeed();
@@ -556,9 +516,6 @@
     });
   }
 
-  /* ==========================================================================
-     Interactive hero terminal
-     ========================================================================== */
 
   function initHeroTerminal() {
     const body = document.getElementById("terminal-body");
@@ -686,9 +643,6 @@
     });
   }
 
-  /* ==========================================================================
-     Command palette (Cmd/Ctrl + K)
-     ========================================================================== */
 
   function initCommandPalette() {
     const palette = document.getElementById("command-palette");
@@ -854,9 +808,6 @@
         event.preventDefault();
         highlight(-1);
       } else if (event.key === "Tab") {
-        // The search input is the only focusable element in this dialog —
-        // keep focus trapped inside it rather than letting Tab escape to
-        // the page behind the modal.
         event.preventDefault();
         input.focus();
       } else if (event.key === "Enter") {
@@ -871,9 +822,6 @@
     });
   }
 
-  /* ==========================================================================
-     Live GitHub activity feed
-     ========================================================================== */
 
   const GITHUB_USERNAME = "Marwan-Mostafa";
   const GITHUB_CACHE_KEY = "githubActivityCache:" + GITHUB_USERNAME;
@@ -921,8 +869,7 @@
       return;
     }
 
-    if (!cachedRepos) return; // still loading — skeletons remain in place
-
+    if (!cachedRepos) return;
     grid.innerHTML = "";
     cachedRepos.forEach(function (repo) {
       const card = document.createElement("div");
@@ -964,8 +911,6 @@
     const grid = document.getElementById("activity-grid");
     if (!grid) return;
 
-    // Serve from cache first if it's fresh — avoids hitting GitHub's 60
-    // requests/hour anonymous rate limit when many visitors share an IP.
     const cached = readActivityCache();
     if (cached) {
       cachedRepos = cached;
@@ -996,9 +941,6 @@
       });
   }
 
-  /* ==========================================================================
-     Recruiter mode
-     ========================================================================== */
 
   function initRecruiterMode() {
     const toggle = document.getElementById("recruiter-toggle");
@@ -1029,10 +971,6 @@
       });
     }
   }
-
-  /* ==========================================================================
-     Save contact (vCard + QR)
-     ========================================================================== */
 
   const CONTACT = {
     name: "Marwan Mostafa",
@@ -1078,18 +1016,12 @@
     });
   }
 
-  /* ==========================================================================
-     Footer year
-     ========================================================================== */
 
   function initFooterYear() {
     const el = document.getElementById("footer-year");
     if (el) el.textContent = String(new Date().getFullYear());
   }
 
-  /* ==========================================================================
-     Init
-     ========================================================================== */
 
   document.addEventListener("DOMContentLoaded", function () {
     initThemeToggle();
@@ -1105,9 +1037,6 @@
     initRecruiterMode();
     initSaveContact();
     initFooterYear();
-
-    // Sync UI copy (labels, placeholders) with whatever language the
-    // anti-flash inline script already applied to <html lang>.
     applyLanguage(currentLang());
   });
 })();
