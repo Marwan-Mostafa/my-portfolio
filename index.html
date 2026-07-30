@@ -29,7 +29,12 @@
     <meta property="og:description"
         content="Frontend developer building fast, accessible, and polished web interfaces.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="./img/maro.png">
+    <!-- TODO: replace YOUR-DOMAIN below with your real production domain.
+         og:url and og:image MUST be absolute URLs, or link previews on
+         Facebook/Twitter/LinkedIn/WhatsApp will fail to resolve them. -->
+    <meta property="og:url" content="https://YOUR-DOMAIN.com/">
+    <meta property="og:image" content="https://YOUR-DOMAIN.com/img/maro.png">
+    <link rel="canonical" href="https://YOUR-DOMAIN.com/">
 
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
 
@@ -47,7 +52,8 @@
 
     <header class="site-header" id="site-header">
         <div class="site-header-inner">
-            <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">Marwan Mostafa<span class="brand-dot">.</span></a>
+            <a href="#hero" class="brand" aria-label="Marwan Mostafa — back to top">Marwan Mostafa<span
+                    class="brand-dot">.</span></a>
 
             <div class="header-controls">
                 <nav class="nav" aria-label="Primary">
@@ -64,6 +70,7 @@
 
                 <div class="header-utility" role="group" aria-label="Utilities">
                     <button type="button" class="header-icon-btn" id="open-palette-btn"
+                        data-i18n-aria-label="palette.ariaLabel" data-i18n-title="palette.ariaLabel"
                         aria-label="Quick search (Ctrl/Cmd + K)" title="Quick search (Ctrl/Cmd + K)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -73,6 +80,7 @@
                     </button>
 
                     <button type="button" class="header-icon-btn" id="recruiter-toggle" aria-pressed="false"
+                        data-i18n-aria-label="recruiter.ariaLabel" data-i18n-title="recruiter.toggleOn"
                         aria-label="Toggle recruiter mode" title="Recruiter mode">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -412,8 +420,6 @@
                         data-i18n="certificates.view">View certificate</a>
                 </article>
 
-
-
             </div>
             <p class="certificates-note" id="certificates-note" data-i18n="recruiter.certNote">+4 additional
                 certificates available — ask and I'll share them.</p>
@@ -474,7 +480,8 @@
     </main>
 
     <footer class="site-footer">
-        <p data-i18n="footer.rights">&copy; 2025 Marwan Mostafa. All rights reserved.</p>
+        <p>&copy; <span id="footer-year">2026</span> <span data-i18n="footer.rights">Marwan Mostafa. All rights
+                reserved.</span></p>
     </footer>
 
     <div class="command-palette" id="command-palette" hidden>

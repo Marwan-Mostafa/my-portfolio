@@ -16,6 +16,12 @@
   --color-primary-hover: #1b3bb0;
   --color-accent: #0ea5a0;
   --color-highlight: #f0a63a;
+  /* Text-safe variant of --color-highlight: the raw highlight color reads
+     at only ~2:1 contrast against light card backgrounds (used for the
+     small bold "Featured" badge), well under the 4.5:1 WCAG AA minimum.
+     Dark theme overrides this back to the brighter --color-highlight,
+     since there it sits on a dark card and already reads at ~10:1. */
+  --color-highlight-text: color-mix(in srgb, var(--color-highlight) 55%, black);
   --color-danger: #d64545;
   --color-success: #1a9c6b;
   --color-header-bg: #12151c;
@@ -37,8 +43,6 @@
   --space-6: 3rem;      /* 48px */
   --space-7: 4rem;      /* 64px */
   --space-8: 6rem;      /* 96px */
-  --space-9: 8rem;      /* 96px */
-  --space-10: 10rem;      /* 96px */
 
   /* Radius */
   --radius-sm: 8px;
@@ -84,6 +88,7 @@
   --color-primary-hover: #97a9ff;
   --color-accent: #2dd4c7;
   --color-highlight: #ffb84d;
+  --color-highlight-text: var(--color-highlight);
   --color-danger: #ff6b6b;
   --color-success: #34d399;
 
@@ -107,6 +112,7 @@
     --color-primary-hover: #97a9ff;
     --color-accent: #2dd4c7;
     --color-highlight: #ffb84d;
+    --color-highlight-text: var(--color-highlight);
     --color-danger: #ff6b6b;
     --color-success: #34d399;
 
@@ -206,10 +212,7 @@ textarea:focus-visible {
 .btn-github:focus-visible,
 .btn-figma:focus-visible,
 .cert-btn:focus-visible,
-.btn-submit:focus-visible,
-.header-icon-btn:focus-visible,
-.lang-toggle:focus-visible,
-.menu-toggle:focus-visible {
+.btn-submit:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 6px var(--color-accent);
 }
@@ -302,15 +305,30 @@ section > h2::after {
   height: 100%;
   margin-inline: auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: var(--space-4);
+}
+
+/* Three explicit visual zones, built from a flex chain:
+   1) .brand            — fixed width, stays put at the start
+   2) .header-controls   — flex:1, grows to fill all remaining width
+        2a) .nav (nav-menu) — flex:1 *within* header-controls, so its
+            links end up centered in the space between brand and utility
+        2b) .header-utility — fixed width, icons grouped at the true end
+        2c) .menu-toggle     — fixed width, hamburger (mobile only) */
+.nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
 }
 
 .header-controls {
+  flex: 1 1 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: var(--space-10);
+  gap: var(--space-3);
+  min-width: 0;
 }
 
 /* Backdrop shown behind the open mobile menu; also used to lock scroll */
@@ -352,8 +370,11 @@ body.palette-open {
 .nav-menu {
   list-style: none;
   display: flex;
-  gap: var(--space-4);
+  flex-wrap: nowrap;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
   padding: 0;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .nav-menu li {
@@ -361,19 +382,20 @@ body.palette-open {
 }
 
 .nav-menu a {
+  display: inline-block;
   text-decoration: none;
   color: var(--color-inverse-muted);
   font-weight: 500;
-  font-size: 0.95rem;
-  padding: var(--space-2) 0;
+  font-size: clamp(0.82rem, 1vw + 0.6rem, 0.95rem);
+  padding: var(--space-2) 0 var(--space-1);
   transition: color var(--transition-base);
 }
 
 .nav-menu a::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: -4px;
+  inset-inline-start: 0;
+  bottom: -2px;
   width: 0;
   height: 2px;
   background: var(--color-accent);
@@ -408,6 +430,7 @@ body.palette-open {
   gap: 5px;
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -797,7 +820,7 @@ body.palette-open {
 .project-badge {
   display: inline-block;
   background: color-mix(in srgb, var(--color-highlight) 18%, transparent);
-  color: var(--color-highlight);
+  color: var(--color-highlight-text);
   border: 1px solid color-mix(in srgb, var(--color-highlight) 45%, transparent);
   font-size: 0.72rem;
   font-weight: 700;
@@ -1209,6 +1232,7 @@ body.palette-open {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 .header-icon-btn {
@@ -1240,6 +1264,17 @@ body.palette-open {
 
 .header-icon-btn:active {
   transform: scale(0.92);
+}
+
+/* The header stays dark in both themes by design (see the dark-theme
+   overrides comment above), so its focus rings must use that same fixed
+   dark color as the inner ring — not var(--color-bg), which flips to a
+   light color in light mode and would look like a mismatched halo here. */
+.header-icon-btn:focus-visible,
+.lang-toggle:focus-visible,
+.menu-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-header-bg), 0 0 0 6px var(--color-accent);
 }
 
 .header-icon-btn[aria-pressed="true"] {
@@ -1496,9 +1531,16 @@ body.palette-open {
   flex-wrap: wrap;
   gap: var(--space-3);
   padding: var(--space-4) 8%;
+  /* .site-header is position:fixed and removed from normal document flow,
+     so without this the bar rendered directly underneath it (hidden behind
+     the header) every time recruiter mode was toggled on. This pushes the
+     bar down to start exactly where the fixed header ends. */
+  margin-top: var(--header-height);
   background: var(--color-header-bg);
   color: var(--color-inverse);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 10;
 }
 
 body.recruiter-mode .recruiter-bar {
@@ -1551,7 +1593,7 @@ body.recruiter-mode .certificates-note {
 .activity-subtitle {
   color: var(--color-ink-muted);
   font-size: 0.95rem;
-  margin: calc(-1 * var(--space-4)) auto var(--space-6);
+  margin: 0 auto var(--space-6);
   max-width: 560px;
 }
 

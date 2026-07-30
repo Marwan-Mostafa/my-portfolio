@@ -18,7 +18,7 @@
     function applyTheme(theme) {
       root.setAttribute("data-theme", theme);
       toggle.setAttribute("aria-pressed", String(theme === "dark"));
-      toggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+      toggle.setAttribute("aria-label", t(theme === "dark" ? "palette.cmd.themeLight" : "palette.cmd.themeDark"));
       try {
         localStorage.setItem("theme", theme);
       } catch (e) {
@@ -212,18 +212,29 @@
      Contact form
      ========================================================================== */
 
-  // TODO: point this at a real form backend (Formspree, Getform, a custom
-  // API route, etc.) before deploying. Until then, submissions cannot
-  // actually be delivered anywhere.
+  // ⚠️ ACTION REQUIRED BEFORE GOING LIVE ⚠️
+  // This still points at a placeholder Formspree ID. Every submission will
+  // fail (404) until you replace it with your real endpoint:
+  //   1. Create a free form at https://formspree.io (or any provider you prefer)
+  //   2. Copy the endpoint URL it gives you, e.g. https://formspree.io/f/abc123xy
+  //   3. Paste it below, replacing the placeholder.
+  // Until this is fixed, the form will show a clear "not connected yet"
+  // message to visitors instead of silently failing.
   const FORM_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID";
+  const FORM_ENDPOINT_IS_CONFIGURED = FORM_ENDPOINT.indexOf("REPLACE_WITH_YOUR_FORM_ID") === -1;
 
   const SUCCESS_MESSAGE_DURATION_MS = 3000;
+
+  // Simple, permissive email shape check — good enough to catch obvious
+  // typos ("name@", "name@site") without rejecting valid real-world addresses.
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function initContactForm() {
     const form = document.getElementById("contact-form");
     const submitBtn = document.getElementById("submit-btn");
     const submitLabel = submitBtn ? submitBtn.querySelector(".btn-submit-label") : null;
     const status = document.getElementById("form-status");
+    const emailField = form ? form.elements.email : null;
 
     if (!form || !submitBtn || !submitLabel || !status) return;
 
@@ -292,6 +303,19 @@
         return;
       }
 
+      if (!EMAIL_PATTERN.test(email)) {
+        setErrorState(t("contact.invalidEmail"));
+        if (emailField) emailField.focus();
+        return;
+      }
+
+      if (!FORM_ENDPOINT_IS_CONFIGURED) {
+        // Fail fast with a clear, honest message instead of a silent 404 —
+        // remove this whole block once FORM_ENDPOINT is set for real.
+        setErrorState(t("contact.notConfigured"));
+        return;
+      }
+
       setLoadingState();
 
       submitForm(new FormData(form))
@@ -315,7 +339,7 @@
       "nav.home": "Home", "nav.about": "About", "nav.skills": "Skills",
       "nav.projects": "Projects", "nav.activity": "Activity",
       "nav.certificates": "Certificates", "nav.contact": "Contact",
-      "palette.open": "Quick search", "palette.placeholder": "Type a command or search…",
+      "palette.open": "Quick search", "palette.ariaLabel": "Quick search (Ctrl/Cmd + K)", "palette.placeholder": "Type a command or search…",
       "palette.empty": "No matching commands.",
       "palette.cmd.goHome": "Go to Home", "palette.cmd.goAbout": "Go to About",
       "palette.cmd.goSkills": "Go to Skills", "palette.cmd.goProjects": "Go to Projects",
@@ -329,7 +353,8 @@
       "palette.cmd.recruiterOn": "Enable Recruiter mode", "palette.cmd.recruiterOff": "Disable Recruiter mode",
       "palette.cmd.saveContact": "Save contact (vCard)",
       "palette.group.nav": "Navigate", "palette.group.action": "Actions",
-      "recruiter.toggleOn": "🎯 Recruiter mode", "recruiter.toggleOff": "🎯 Recruiter mode: On",
+      "recruiter.toggleOn": "Recruiter mode", "recruiter.toggleOff": "Recruiter mode: On",
+      "recruiter.ariaLabel": "Toggle recruiter mode",
       "recruiter.summaryNote": " · 7+ shipped projects · Available for hire",
       "recruiter.downloadCV": "Download CV (PDF)", "recruiter.emailMe": "Email me",
       "recruiter.certNote": "+4 additional certificates available — ask and I'll share them.",
@@ -372,9 +397,11 @@
       "contact.successMsg": "Thanks — your message is on its way. I'll reply soon.",
       "contact.errorMsg": "Something went wrong. Please try again or email me directly.",
       "contact.fillAll": "Please fill in every field before sending.",
+      "contact.invalidEmail": "Please enter a valid email address.",
+      "contact.notConfigured": "Contact form isn't connected yet — please email me directly instead.",
       "contact.reachMe": "You can also reach me on:",
       "vcard.label": "Save my contact instantly:", "vcard.button": "Download vCard (.vcf)",
-      "footer.rights": "© 2025 Marwan Mostafa. All rights reserved.",
+      "footer.rights": "Marwan Mostafa. All rights reserved.",
       "terminal.help": "Available commands: help, whoami, skills, projects, certificates, contact, activity, theme [light|dark], lang [en|ar], resume, github, linkedin, clear",
       "terminal.whoami": "Marwan Mostafa — Frontend Developer building fast, accessible, polished interfaces.",
       "terminal.skills": "HTML5 · CSS3 · JavaScript (ES6+) · Tailwind CSS · Git & GitHub",
@@ -391,7 +418,7 @@
       "nav.home": "الرئيسية", "nav.about": "نبذة عني", "nav.skills": "المهارات",
       "nav.projects": "المشاريع", "nav.activity": "النشاط",
       "nav.certificates": "الشهادات", "nav.contact": "تواصل معي",
-      "palette.open": "بحث سريع", "palette.placeholder": "اكتب أمرًا أو ابحث…",
+      "palette.open": "بحث سريع", "palette.ariaLabel": "بحث سريع (Ctrl/Cmd + K)", "palette.placeholder": "اكتب أمرًا أو ابحث…",
       "palette.empty": "لا توجد أوامر مطابقة.",
       "palette.cmd.goHome": "الذهاب إلى الرئيسية", "palette.cmd.goAbout": "الذهاب إلى نبذة عني",
       "palette.cmd.goSkills": "الذهاب إلى المهارات", "palette.cmd.goProjects": "الذهاب إلى المشاريع",
@@ -405,7 +432,8 @@
       "palette.cmd.recruiterOn": "تفعيل وضع المسؤول عن التوظيف", "palette.cmd.recruiterOff": "إيقاف وضع المسؤول عن التوظيف",
       "palette.cmd.saveContact": "حفظ جهة الاتصال (vCard)",
       "palette.group.nav": "التنقل", "palette.group.action": "إجراءات",
-      "recruiter.toggleOn": "🎯 وضع التوظيف", "recruiter.toggleOff": "🎯 وضع التوظيف: مفعّل",
+      "recruiter.toggleOn": "وضع التوظيف", "recruiter.toggleOff": "وضع التوظيف: مفعّل",
+      "recruiter.ariaLabel": "تبديل وضع التوظيف",
       "recruiter.summaryNote": " · أكثر من 7 مشاريع منجزة · متاح للعمل",
       "recruiter.downloadCV": "تحميل السيرة الذاتية (PDF)", "recruiter.emailMe": "راسلني بالإيميل",
       "recruiter.certNote": "+4 شهادات إضافية متاحة — تواصل معي وسأشاركها معك.",
@@ -448,9 +476,11 @@
       "contact.successMsg": "شكرًا — رسالتك في طريقها إليّ. هردّ عليك قريبًا.",
       "contact.errorMsg": "حدث خطأ ما. حاول مرة أخرى أو راسلني مباشرة بالإيميل.",
       "contact.fillAll": "من فضلك املأ كل الحقول قبل الإرسال.",
+      "contact.invalidEmail": "من فضلك اكتب بريدًا إلكترونيًا صحيحًا.",
+      "contact.notConfigured": "فورم التواصل لسه مش متصل — من فضلك راسلني مباشرة بالإيميل.",
       "contact.reachMe": "تقدر كمان تتواصل معايا عبر:",
       "vcard.label": "احفظ بياناتي فورًا:", "vcard.button": "تحميل vCard (.vcf)",
-      "footer.rights": "© 2025 مروان مصطفى. جميع الحقوق محفوظة.",
+      "footer.rights": "مروان مصطفى. جميع الحقوق محفوظة.",
       "terminal.help": "الأوامر المتاحة: help, whoami, skills, projects, certificates, contact, activity, theme [light|dark], lang [en|ar], resume, github, linkedin, clear",
       "terminal.whoami": "مروان مصطفى — مطوّر واجهات أمامية يبني واجهات سريعة وسهلة الوصول واحترافية.",
       "terminal.skills": "HTML5 · CSS3 · JavaScript (ES6+) · Tailwind CSS · Git وGitHub",
@@ -488,6 +518,18 @@
       const key = el.getAttribute("data-i18n-placeholder");
       const value = (I18N[lang] && I18N[lang][key]) || I18N.en[key];
       if (value !== undefined) el.setAttribute("placeholder", value);
+    });
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(function (el) {
+      const key = el.getAttribute("data-i18n-aria-label");
+      const value = (I18N[lang] && I18N[lang][key]) || I18N.en[key];
+      if (value !== undefined) el.setAttribute("aria-label", value);
+    });
+
+    document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+      const key = el.getAttribute("data-i18n-title");
+      const value = (I18N[lang] && I18N[lang][key]) || I18N.en[key];
+      if (value !== undefined) el.setAttribute("title", value);
     });
 
     const langLabel = document.getElementById("lang-toggle-label");
@@ -581,11 +623,11 @@
         case "theme":
           if (arg === "light" || arg === "dark") {
             document.documentElement.setAttribute("data-theme", arg);
-            try { localStorage.setItem("theme", arg); } catch (e) {}
+            try { localStorage.setItem("theme", arg); } catch (e) { }
             const themeToggle = document.getElementById("theme-toggle");
             if (themeToggle) {
               themeToggle.setAttribute("aria-pressed", String(arg === "dark"));
-              themeToggle.setAttribute("aria-label", arg === "dark" ? "Switch to light theme" : "Switch to dark theme");
+              themeToggle.setAttribute("aria-label", t(arg === "dark" ? "palette.cmd.themeLight" : "palette.cmd.themeDark"));
             }
             printLine(t("terminal.themeSet") + arg);
           } else {
@@ -733,7 +775,7 @@
 
     function copyToClipboard(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(function () {});
+        navigator.clipboard.writeText(text).catch(function () { });
       }
     }
 
@@ -834,8 +876,31 @@
      ========================================================================== */
 
   const GITHUB_USERNAME = "Marwan-Mostafa";
+  const GITHUB_CACHE_KEY = "githubActivityCache:" + GITHUB_USERNAME;
+  const GITHUB_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour — keeps requests well under the 60/hr anonymous rate limit
   let cachedRepos = null;
   let activityFetchFailed = false;
+
+  function readActivityCache() {
+    try {
+      const raw = localStorage.getItem(GITHUB_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.repos) || typeof parsed.fetchedAt !== "number") return null;
+      if (Date.now() - parsed.fetchedAt > GITHUB_CACHE_TTL_MS) return null;
+      return parsed.repos;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeActivityCache(repos) {
+    try {
+      localStorage.setItem(GITHUB_CACHE_KEY, JSON.stringify({ repos: repos, fetchedAt: Date.now() }));
+    } catch (e) {
+      /* localStorage unavailable — cache is best-effort only */
+    }
+  }
 
   function timeAgo(dateString) {
     const diffMs = Date.now() - new Date(dateString).getTime();
@@ -899,6 +964,15 @@
     const grid = document.getElementById("activity-grid");
     if (!grid) return;
 
+    // Serve from cache first if it's fresh — avoids hitting GitHub's 60
+    // requests/hour anonymous rate limit when many visitors share an IP.
+    const cached = readActivityCache();
+    if (cached) {
+      cachedRepos = cached;
+      renderActivityFeed();
+      return;
+    }
+
     fetch("https://api.github.com/users/" + GITHUB_USERNAME + "/repos?sort=updated&per_page=6")
       .then(function (response) {
         if (!response.ok) throw new Error("GitHub API responded with " + response.status);
@@ -906,9 +980,17 @@
       })
       .then(function (repos) {
         cachedRepos = repos.filter(function (r) { return !r.fork; }).slice(0, 6);
+        writeActivityCache(cachedRepos);
         renderActivityFeed();
       })
       .catch(function () {
+        // Fall back to a stale cache rather than showing an error, if one exists.
+        const stale = readActivityCache();
+        if (stale) {
+          cachedRepos = stale;
+          renderActivityFeed();
+          return;
+        }
         activityFetchFailed = true;
         renderActivityFeed();
       });
@@ -927,13 +1009,13 @@
       toggle.setAttribute("aria-pressed", String(isOn));
       try {
         localStorage.setItem("recruiterMode", isOn ? "1" : "0");
-      } catch (e) {}
+      } catch (e) { }
     }
 
     let stored = false;
     try {
       stored = localStorage.getItem("recruiterMode") === "1";
-    } catch (e) {}
+    } catch (e) { }
     apply(stored);
 
     toggle.addEventListener("click", function () {
@@ -997,6 +1079,15 @@
   }
 
   /* ==========================================================================
+     Footer year
+     ========================================================================== */
+
+  function initFooterYear() {
+    const el = document.getElementById("footer-year");
+    if (el) el.textContent = String(new Date().getFullYear());
+  }
+
+  /* ==========================================================================
      Init
      ========================================================================== */
 
@@ -1013,6 +1104,7 @@
     initActivityFeed();
     initRecruiterMode();
     initSaveContact();
+    initFooterYear();
 
     // Sync UI copy (labels, placeholders) with whatever language the
     // anti-flash inline script already applied to <html lang>.
